@@ -1,0 +1,65 @@
+-EVE scale online battles
+
+-InputManager
+  -handles mouse input
+  -double click
+  -key press
+  -events?
+
+-ResourceManager
+  -textures
+  -sounds?*
+
+-Network
+  -enet
+
+-Scene
+  -Updates objects
+
+-GameScene
+  -std::vector<GameObject*> m_selected
+
+-GameObject
+  -update and render functions
+  -unordered map that holds all integer properties
+  -name
+
+-list of different structures:
+  -Planet
+    -Upgradeable
+  -Station*
+    -Upgradeable
+    -Radar station
+    -Defence station
+    -Stasis field station
+    -Portal station
+  -Station destroyer ship*
+  -Sun(?)*
+    -Extra power generated near the sun
+    -Provides visibility to its immediate surroundings
+    -Explosion destroys planets
+
+-Connection
+  -increases ship speed
+  -increases power generation very slightly
+  -price distance^2
+ 
+-SpaceShip
+  -transfers power
+
+-AI*
+
+* if there is time
+
+
+
+Progress:
+-Planets that can be selected
+-Sending a ship to the other planet
+-Network
+-Connecting planets
+-Power generation
+-Planet levels
+
+
+

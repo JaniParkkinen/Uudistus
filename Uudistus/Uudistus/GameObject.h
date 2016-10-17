@@ -17,4 +17,8 @@ public:
 protected:
     float x, y;
     sf::Sprite* sprite;
+    std::string m_name;
+    //std::unordered_map<string(or property enum?), int>() properties;
+
+    Scene* m_scene;
 };

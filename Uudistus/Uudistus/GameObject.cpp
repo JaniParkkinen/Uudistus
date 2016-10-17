@@ -24,3 +24,13 @@ sf::Vector2f GameObject::getPosition()
 {
     return sf::Vector2f(x, y);
 }
+void GameObject::update(const float dt)
+{
+    sprite->setScale(0.5, 0.5);
+    sprite->setPosition(sf::Vector2f(x, y));
+}
+
+void GameObject::render(sf::RenderTarget* rt)
+{
+    rt->draw(*sprite);
+}
