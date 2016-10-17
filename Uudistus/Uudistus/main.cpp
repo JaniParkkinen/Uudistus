@@ -4,12 +4,14 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(512, 512), "MultiUudistus2");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "MultiUudistus2");
+
+    window.setFramerateLimit(60);
 
     sf::CircleShape shape(256.f);
     shape.setFillColor(sf::Color(0, 25, 10));
 
-    Scene* current = new GameScene();
+    Scene* current = new GameScene(&window);
 
     while (window.isOpen())
     {
@@ -23,7 +25,9 @@ int main()
         current->update(0.1f);
 
         window.clear();
-        window.draw(shape);
+
+        current->render(&window);
+        //window.draw(shape);
         window.display();
     }
     return 0;
