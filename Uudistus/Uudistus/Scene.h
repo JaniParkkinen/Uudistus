@@ -16,7 +16,8 @@ public:
 
     virtual void update(const float dt) = 0
     {
-        input->update(dt, rw);
+        if(rw != nullptr)
+            input->update(dt, rw);
 
         for (auto o : gameObjects)
         {

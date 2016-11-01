@@ -4,7 +4,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 800), "MultiUudistus2");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Galactic Uudistus");
 
     window.setFramerateLimit(60);
 

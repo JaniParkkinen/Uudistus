@@ -125,6 +125,8 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Star.cpp" />
+    <ClCompile Include="Star.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameScene.h" />

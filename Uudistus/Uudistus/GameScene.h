@@ -9,10 +9,18 @@ public:
     void update(const float dt)override;
     void render(sf::RenderTarget* rt)override;
 private:
-    sf::Texture tex;
+    sf::Texture tex; //temp default texture
     sf::RenderWindow* window;
-public: 
-    
 
-    //std::vector<AIController> ais;
+    void generateLevel();
+
+
+    sf::Sprite* m_GUIBackground;
+    //std::vector<Button*> m_menu;
+    std::vector<GameObject*> m_world;
+    //std::vector<GameObject*> m_stars;
+    std::vector<GameObject*> m_selected;
+    //std::vector<Ship*> m_ships;
+public: 
+
 };

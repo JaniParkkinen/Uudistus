@@ -1,11 +1,14 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const float x, const float y, sf::Texture* tex)
-    :y(y), x(x)
+GameObject::GameObject(const sf::Vector2f position, const int owner, const std::string type, sf::Texture* texture, const float energy)
+    :m_position(position),
+    m_owner(owner),
+    m_type(type),
+    m_energy(energy)
 {
-    if (tex != nullptr)
+    if (texture != nullptr)
     {
-        sprite = new sf::Sprite(*tex);
+        m_sprite = new sf::Sprite(*texture);
     }
 }
 
@@ -16,21 +19,21 @@ void GameObject::setPosition(sf::Vector2f pos)
 
 void GameObject::setPosition(float x, float y)
 {
-    this->x = x;
-    this->y = y;
+    this->m_position.x = x;
+    this->m_position.y = y;
 }
 
 sf::Vector2f GameObject::getPosition()
 {
-    return sf::Vector2f(x, y);
+    return m_position;
 }
 void GameObject::update(const float dt)
 {
-    sprite->setScale(0.5, 0.5);
-    sprite->setPosition(sf::Vector2f(x, y));
+    m_sprite->setScale(0.5, 0.5);
+    m_sprite->setPosition(m_position);
 }
 
 void GameObject::render(sf::RenderTarget* rt)
 {
-    rt->draw(*sprite);
+    rt->draw(*m_sprite);
 }

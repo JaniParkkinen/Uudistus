@@ -11,22 +11,56 @@
   -sounds?*
 
 -Network
-  -enet
+  -enet?
 
 -Scene
   -Updates objects
 
 -GameScene
+  -sf::Sprite* m_GUIBackground;
+  -std::vector<Button*> m_menu;
+
+  -std::vector<GameObject*> m_world;
+  -std::vector<Planet*> m_planets ?
   -std::vector<GameObject*> m_selected
+  -std::vector<Ship*> m_ships
+
+  -std::Vector<AIController*> m_AIs; *
+
+  update(float dt)
+  {
+    update_structures(dt, m_ships);
+    update_planets(dt);
+    if(!GUIInteraction())
+    {
+      worldInteracion(m_structures)
+    }
+  }
+  
+  render(window)
+  {
+    render_GUI(window); //object properties, buttons, minimap*
+    render_structures(window); //FoW* inside this: render only what's needed!
+  }
+
 
 -GameObject
-  -update and render functions
-  -unordered map that holds all integer properties
+  -update(float dt) (?);
+  -render(window)
+  -sf::Sprite
+  -health
+  -coordinates
+  -owner
+  -team?
+  -???
+  //-unordered map that holds all integer properties
   -name
 
 -list of different structures:
   -Planet
     -Upgradeable
+    -Struct Connection {Planet* planet, float length};
+    -std::List<Connection> m_connections;
   -Station*
     -Upgradeable
     -Radar station
@@ -42,19 +76,43 @@
 -Connection
   -increases ship speed
   -increases power generation very slightly
-  -price distance^2
+  -price = distance^2
  
 -SpaceShip
   -transfers power
 
+-Chat
+
+-Lobby
+
 -AI*
+
+-Match statistics tracking* (somewhat necessary for AI and end conditions)
+
+-Player stats*
+  -Player Ranks*
+  -Achievements*
+  -Unlockables*
+
+-Donate button*
+
+-Tutorial*
+  -Map triggers*
+  -Cool effects*
+
+-Campaign*
+
+-More Gamemodes*
+
+-LUA scripting for maps*
+
 
 * if there is time
 
 
 
 Progress:
--Planets that can be selected
+-Planets that can be selected (print properties to console?)
 -Sending a ship to the other planet
 -Network
 -Connecting planets
