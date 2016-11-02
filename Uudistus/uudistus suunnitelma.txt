@@ -21,7 +21,7 @@
   -std::vector<Button*> m_menu;
 
   -std::vector<GameObject*> m_world;
-  -std::vector<Planet*> m_planets ?
+  -std::vector<Star*> m_stars ?
   -std::vector<GameObject*> m_selected
   -std::vector<Ship*> m_ships
 

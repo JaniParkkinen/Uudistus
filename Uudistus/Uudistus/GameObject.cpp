@@ -27,13 +27,32 @@ sf::Vector2f GameObject::getPosition()
 {
     return m_position;
 }
-void GameObject::update(const float dt)
+
+sf::Sprite* GameObject::getSprite()
 {
-    m_sprite->setScale(0.5, 0.5);
-    m_sprite->setPosition(m_position);
+    return m_sprite;
 }
 
-void GameObject::render(sf::RenderTarget* rt)
+float GameObject::getDistanceToPoint(sf::Vector2f point)
 {
-    rt->draw(*m_sprite);
+    return getDistanceToPoint(point.x, point.y);
 }
+
+float GameObject::getDistanceToPoint(float x, float y)
+{
+    float deltaX = getPosition().x - x;
+    float deltaY = getPosition().y - y;
+
+    return sqrt(deltaX*deltaX + deltaY*deltaY);
+}
+
+//void GameObject::update(const float dt)
+//{
+//    m_sprite->setScale(0.5, 0.5);
+//    m_sprite->setPosition(m_position);
+//}
+
+//void GameObject::render(sf::RenderTarget* rt)
+//{
+//    rt->draw(*m_sprite);
+//}

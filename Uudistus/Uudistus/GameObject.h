@@ -9,12 +9,16 @@ class GameObject
 public:
     GameObject(const sf::Vector2f position, const int owner, const std::string type, sf::Texture* texture = nullptr, const float energy = 0);
 
-    virtual void update(const float dt) = 0;
-    virtual void render(sf::RenderTarget* rt) = 0;
+    //virtual void update(const float dt) = 0;
+    //virtual void render(sf::RenderTarget* rt) = 0;
 
     void setPosition(sf::Vector2f pos);
     void setPosition(float x, float y);
     sf::Vector2f getPosition();
+    sf::Sprite* getSprite();
+
+    float getDistanceToPoint(sf::Vector2f point);
+    float getDistanceToPoint(float x, float y);
 
 protected:
     sf::Sprite* m_sprite;

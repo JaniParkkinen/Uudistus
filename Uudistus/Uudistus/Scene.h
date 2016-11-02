@@ -3,8 +3,10 @@
 #include <vector>
 #include <SFML\Graphics.hpp>
 
-#include "GameObject.h"
+//#include "GameObject.h"
 #include "InputManager.h"
+
+//class GameObject;
 
 class Scene
 {
@@ -18,19 +20,9 @@ public:
     {
         if(rw != nullptr)
             input->update(dt, rw);
+    }
 
-        for (auto o : gameObjects)
-        {
-            o->update(dt);
-        }
-    }
-    virtual void render(sf::RenderTarget* rt) = 0
-    {
-        for (auto o : gameObjects)
-        {
-            o->render(rt);
-        }
-    }
+    virtual void render(sf::RenderTarget* rt) = 0;
 
     void setWindow(sf::RenderWindow* renderWindow)
     {
@@ -43,7 +35,7 @@ public:
     }
 
 protected:
-    std::vector<GameObject*> gameObjects;
+    //std::vector<GameObject*> gameObjects;
     InputManager* input;
     sf::RenderWindow* rw;
 };

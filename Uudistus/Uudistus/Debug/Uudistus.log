@@ -3,5 +3,7 @@
   Compiling...
   main.cpp
   Generating Code...
-  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Uudistus.exe
-  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Uudistus.pdb (Partial PDB)
+Debug\Star.obj : warning LNK4042: object specified more than once; extras ignored
+GameScene.obj : error LNK2019: unresolved external symbol "public: __thiscall Star::Star(class sf::Vector2<float>,int,class sf::Texture *,float)" (??0Star@@QAE@V?$Vector2@M@sf@@HPAVTexture@2@M@Z) referenced in function "private: bool __thiscall GameScene::createStar(class sf::Vector2<float>,int,float)" (?createStar@GameScene@@AAE_NV?$Vector2@M@sf@@HM@Z)
+GameScene.obj : error LNK2019: unresolved external symbol "public: bool __thiscall Star::connect(class Star *)" (?connect@Star@@QAE_NPAV1@@Z) referenced in function "private: void __thiscall GameScene::generateLevel(void)" (?generateLevel@GameScene@@AAEXXZ)
+C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Uudistus.exe : fatal error LNK1120: 2 unresolved externals
