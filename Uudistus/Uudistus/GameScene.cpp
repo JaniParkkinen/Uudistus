@@ -36,13 +36,17 @@ void GameScene::render(sf::RenderTarget* rt)
     {
         for (Connection c : star->m_connections)
         {
-            sf::Vector2f total = star->getPosition() + c.target->getPosition();
-            sf::Vector2f center(total.x / 2, total.y / 2);
+            if (star->getID() < c.target->getID())
+            {
+                sf::Vector2f total = star->getPosition() + c.target->getPosition();
+                sf::Vector2f center(total.x / 2, total.y / 2);
 
-            line.setPosition(center);
-            line.setRotation(atan2(total.y, total.x));
+                line.setSize(sf::Vector2f(c.length, 4));
+                line.setPosition(center);
+                line.setRotation(atan2(total.y, total.x));
 
-            rt->draw(line);
+                rt->draw(line);
+            }
         }
     }
 }
@@ -51,8 +55,6 @@ void GameScene::generateLevel()
 {
     createStar(sf::Vector2f(64, 64), 0, 500);
     createStar(sf::Vector2f(400, 64), 1, 400);
-    createStar(sf::Vector2f(400, 400), 2, 300);
-    createStar(sf::Vector2f(128, 32), 2, 300);
 
     m_stars[0]->connect(m_stars[1]);
 }
@@ -64,7 +66,7 @@ bool GameScene::createStar(sf::Vector2f position, int owner, float energy)
         if (star->getDistanceToPoint(position) < 256.0f)
             return false;
     }
-    Star* newStar = new Star(position, owner, &tex, energy);
+    Star* newStar = new Star(0, position, owner, &tex, energy);
 
     m_world.push_back(newStar);
     m_stars.push_back(newStar);

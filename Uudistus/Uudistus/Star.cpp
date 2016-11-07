@@ -1,10 +1,10 @@
 #include "Star.h"
 
-Star::Star(const sf::Vector2f position, const int owner, sf::Texture* starTexture/*this from resource manager*/, const float energy)
-    :GameObject(position, owner, "star", starTexture, energy)
-{
-
-}
+//Star::Star(const sf::Vector2f position, const int owner, sf::Texture* starTexture/*this from resource manager*/, const float energy)
+//    :GameObject(position, owner, "star", starTexture, energy)
+//{
+//
+//}
 
 bool Star::connect(Star* target)
 {

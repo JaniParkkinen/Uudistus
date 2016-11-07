@@ -26,6 +26,8 @@ private:
     //std::vector<Ship*> m_ships;
 
     float m_total_time;
+
+    int m_starID = 0;
 public: 
 
 };

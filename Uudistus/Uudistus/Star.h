@@ -3,18 +3,9 @@
 
 #include "GameObject.h"
 
-struct Connection;
+//struct Connection;
 
-class Star : public GameObject
-{
-public:
-    Star(const sf::Vector2f position, const int owner, sf::Texture* starTexture/*this from resource manager*/, const float energy = 100);
-    bool connect(Star* target);
-//private:
-    float m_energyTimer;
-    float m_shipTimer;
-    std::vector<Connection> m_connections;
-};
+class Star;
 
 struct Connection
 {
@@ -25,6 +16,22 @@ struct Connection
     }
     Star* target;
     float length;
+};
+
+class Star : public GameObject
+{
+public:
+    Star(const int ID, const sf::Vector2f position, const int owner, sf::Texture* starTexture/*this from resource manager*/, const float energy = 100)
+        :GameObject(ID, position, owner, "star", starTexture, energy)
+    {
+
+    }
+    bool connect(Star* target);
+
+//private:
+    float m_energyTimer;
+    float m_shipTimer;
+    std::vector<Connection> m_connections;
 };
 
 #endif

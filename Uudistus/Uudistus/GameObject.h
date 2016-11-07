@@ -7,7 +7,7 @@ class Scene;
 class GameObject
 {
 public:
-    GameObject(const sf::Vector2f position, const int owner, const std::string type, sf::Texture* texture = nullptr, const float energy = 0);
+    GameObject(const int ID, const sf::Vector2f position, const int owner, const std::string type, sf::Texture* texture = nullptr, const float energy = 0);
 
     //virtual void update(const float dt) = 0;
     //virtual void render(sf::RenderTarget* rt) = 0;
@@ -19,6 +19,7 @@ public:
 
     float getDistanceToPoint(sf::Vector2f point);
     float getDistanceToPoint(float x, float y);
+    int getID();
 
 protected:
     sf::Sprite* m_sprite;
@@ -26,6 +27,7 @@ protected:
     std::string m_type; //Enum?
     float m_energy;
     int m_owner;
+    int m_ID;
     //int m_team;
 
     Scene* m_scene;

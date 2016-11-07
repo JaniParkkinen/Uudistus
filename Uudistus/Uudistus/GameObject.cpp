@@ -1,7 +1,8 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const sf::Vector2f position, const int owner, const std::string type, sf::Texture* texture, const float energy)
-    :m_position(position),
+GameObject::GameObject(const int ID, const sf::Vector2f position, const int owner, const std::string type, sf::Texture* texture, const float energy)
+    :m_ID(ID),
+    m_position(position),
     m_owner(owner),
     m_type(type),
     m_energy(energy)
@@ -44,6 +45,11 @@ float GameObject::getDistanceToPoint(float x, float y)
     float deltaY = getPosition().y - y;
 
     return sqrt(deltaX*deltaX + deltaY*deltaY);
+}
+
+int GameObject::getID()
+{
+    return m_ID;
 }
 
 //void GameObject::update(const float dt)
