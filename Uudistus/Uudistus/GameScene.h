@@ -2,6 +2,7 @@
 
 #include "Star.h"
 #include "Scene.h"
+#include "GameObject.h"
 
 class GameScene : public Scene
 {
@@ -15,7 +16,7 @@ private:
 
     void generateLevel();
 
-    bool createStar(sf::Vector2f position, int owner, float energy = 100);
+    bool createStar(ud::Vec2 position, int owner, float energy = 100);
 
     sf::Sprite* m_GUIBackground;
     //std::vector<Button*> m_menu;

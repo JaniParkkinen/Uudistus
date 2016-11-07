@@ -16,7 +16,7 @@ bool Star::connect(Star* target)
         if (c.target == target)
             return false;
     }
-    m_connections.push_back(Connection(target, getDistanceToPoint(target->getPosition())));
+    m_connections.push_back(Connection(target, (target->getGameObject()->getPosition() - getGameObject()->getPosition()).length()));
     target->connect(this);
     return true;
 }
