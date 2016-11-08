@@ -1,77 +1,112 @@
 #include "GameScene.h"
 
+#define PI 3.14159265
+
 GameScene::GameScene(sf::RenderWindow* window)
-    :Scene(window), window(window)
+    :Scene(window)
 {
     tex.loadFromFile("assets/star.png");
     m_total_time = 0;
+
+    m_rw = window;
 
     generateLevel();
 }
 
 void GameScene::update(float dt)
 {
-    Scene::update(dt);
+    if (m_rw != nullptr)
+        m_input->update(dt, m_rw);
+
     m_total_time += dt;
-    for (GameObject* go : m_world)
+
+    //selection
+    if (m_input->mousePressed(MouseButton::Left))
     {
-        //go->setPosition((cos(m_total_time) + 1) * 200, (sin(m_total_time) + 1) * 200);
-        ud::Vec2 pos = go->getPosition();
-        go->getSprite()->setPosition(sf::Vector2f(pos.x, pos.y));
+        m_selected.clear();
+        for (GameObject* go : m_world)
+        {
+            if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
+            {
+                m_selected.push_back(go);
+            }
+        }
     }
 }
 
 void GameScene::render(sf::RenderTarget* rt)
 {
-    ////rt->draw(sf::Sprite(tex));
-    //sf::RectangleShape line(sf::Vector2f(100, 5));
-    //line.setFillColor(sf::Color::Cyan);
-
-    //for (GameObject* go : m_world)
+    ////draw grid
+    //sf::RectangleShape square(sf::Vector2f(32, 32));
+    //for (int i = 0; i < 32; i++)
     //{
-    //    rt->draw(*go->getSprite());
-    //}
-
-    ////draw connections
-    //for (Star* star : m_stars)
-    //{
-    //    for (Connection c : star->m_connections)
+    //    for (int j = 0; j < 32; j++)
     //    {
-    //        if (star->getID() < c.target->getID())
-    //        {
-    //            sf::Vector2f total = star->getPosition() + c.target->getPosition();
-    //            sf::Vector2f center(total.x / 2, total.y / 2);
-
-    //            line.setSize(sf::Vector2f(c.length, 4));
-    //            line.setPosition(center);
-    //            line.setRotation(atan2(total.y, total.x));
-
-    //            rt->draw(line);
-    //        }
+    //        square.setFillColor(((i+j)%2==0) ? sf::Color::Black : sf::Color::Green);
+    //        square.setPosition(i * 32, j * 32);
+    //        rt->draw(square);;
     //    }
     //}
+
+    for (GameObject* go : m_world)
+    {
+        rt->draw(*go->getSprite());
+    }
+
+    //draw connections
+    for (Star* star : m_stars)
+    {
+        for (Connection c : star->m_connections)
+        {
+            if (star->getGameObject()->getID() < c.target->getGameObject()->getID())
+            {
+                sf::Vertex line[] =
+                {
+                    sf::Vertex(star->getGameObject()->getPosition()),
+                    sf::Vertex(c.target->getGameObject()->getPosition())
+                };
+                line[0].color = sf::Color::Cyan;
+                line[1].color = sf::Color::Cyan;
+                rt->draw(line, 5, sf::Lines);
+            }
+        }
+    }
+
+    //draw selection
+    sf::CircleShape selection;
+    selection.setFillColor(sf::Color::Transparent);
+    selection.setOutlineColor(sf::Color::White);
+    selection.setOutlineThickness(2);
+
+    for (GameObject* go : m_selected)
+    {
+        selection.setRadius(go->getSize() / 2 + 32.f);
+        selection.setOrigin(go->getSize(), go->getSize());
+        selection.setPosition(go->getPosition());
+        rt->draw(selection);
+    }
 }
 
 void GameScene::generateLevel()
 {
-    createStar(ud::Vec2(64, 64), 0, 500);
-    createStar(ud::Vec2(400, 64), 1, 400);
+    createStar(sf::Vector2f(64, 64), 0, 500);
+    createStar(sf::Vector2f(512, 64), 1, 400);
 
     m_stars[0]->connect(m_stars[1]);
 }
 
-bool GameScene::createStar(ud::Vec2 position, int owner, float energy)
+bool GameScene::createStar(sf::Vector2f position, int owner, float energy)
 {
     //create GameObject
 
-    GameObject* go = new GameObject(m_starID++, position, owner, "star");
+    GameObject* go = new GameObject(m_starID++, position, 64, owner, "star", &tex);
 
     for (Star* star : m_stars)
     {
         if (star->getGameObject()->getDistanceToPoint(position) < 256.0f)
             return false;
     }
-    Star* newStar = new Star(energy);
+    Star* newStar = new Star(go, energy);
     go->addComponent(newStar);
 
     m_world.push_back(go);

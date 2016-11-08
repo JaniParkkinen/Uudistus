@@ -117,7 +117,9 @@ Progress:
 -Network
 -Connecting planets
 -Power generation
--Planet levels
+-Occupying planets
+-Win/lose // First Playable!
+
 
 
 

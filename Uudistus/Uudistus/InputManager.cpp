@@ -27,6 +27,7 @@ sf::Vector2f InputManager::getMousePos()
 
 void InputManager::update(const float dt, const sf::RenderWindow* window)
 {
+    //printf_s("input update\n");
     const float doubleClickMaxTime = 1.0f;
 
     _mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));

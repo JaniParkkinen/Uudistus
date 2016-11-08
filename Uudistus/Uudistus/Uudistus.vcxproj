@@ -130,6 +130,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Star.h" />
+    <ClCompile Include="UudistusMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

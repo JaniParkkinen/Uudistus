@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_SCENE_H
+#define GAME_SCENE_H
 
 #include "Star.h"
 #include "Scene.h"
@@ -12,11 +13,10 @@ public:
     void render(sf::RenderTarget* rt)override;
 private:
     sf::Texture tex; //temp default texture
-    sf::RenderWindow* window;
 
     void generateLevel();
 
-    bool createStar(ud::Vec2 position, int owner, float energy = 100);
+    bool createStar(sf::Vector2f position, int owner, float energy = 100);
 
     sf::Sprite* m_GUIBackground;
     //std::vector<Button*> m_menu;
@@ -32,3 +32,5 @@ private:
 public: 
 
 };
+
+#endif

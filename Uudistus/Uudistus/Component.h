@@ -1,6 +1,5 @@
-#pragma once
-
-#include "UudistusMath.h"
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
 class GameObject;
 
@@ -12,6 +11,8 @@ public:
 
     GameObject* getGameObject();
 
-private:
+protected:
     GameObject* m_gameObject;
 };
+
+#endif

@@ -23,10 +23,12 @@ struct Connection
 class Star : public Component
 {
 public:
-    Star(const float energy = 100)
+    Star(GameObject* parent, const float energy = 100)
     {
+        m_gameObject = parent;
         m_energy = energy;
     }
+    ~Star() {}
     bool connect(Star* target);
 
     void update(float dt)override //const!

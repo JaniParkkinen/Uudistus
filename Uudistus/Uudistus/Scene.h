@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
 
 #include <vector>
 #include <SFML\Graphics.hpp>
@@ -13,29 +14,27 @@ class Scene
 public:
 
     Scene(sf::RenderWindow* rw)
-        :input(new InputManager())
+        :m_input(new InputManager())
     {}
 
-    virtual void update(const float dt) = 0
-    {
-        if(rw != nullptr)
-            input->update(dt, rw);
-    }
+    virtual void update(const float dt) = 0;
 
     virtual void render(sf::RenderTarget* rt) = 0;
 
     void setWindow(sf::RenderWindow* renderWindow)
     {
-        rw = renderWindow;
+        m_rw = renderWindow;
     }
 
     InputManager* getInputManager()
     {
-        return input;
+        return m_input;
     }
 
 protected:
     //std::vector<GameObject*> gameObjects;
-    InputManager* input;
-    sf::RenderWindow* rw;
+    InputManager* m_input;
+    sf::RenderWindow* m_rw;
 };
+
+#endif
