@@ -1,7 +1,9 @@
-#pragma once
+#ifndef GAME_SCENE_H
+#define GAME_SCENE_H
 
 #include "Star.h"
 #include "Scene.h"
+#include "GameObject.h"
 
 class GameScene : public Scene
 {
@@ -11,7 +13,6 @@ public:
     void render(sf::RenderTarget* rt)override;
 private:
     sf::Texture tex; //temp default texture
-    sf::RenderWindow* window;
 
     void generateLevel();
 
@@ -31,3 +32,5 @@ private:
 public: 
 
 };
+
+#endif

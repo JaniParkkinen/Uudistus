@@ -1,3 +1,4 @@
-﻿Debug\//Star.obj : warning LNK4042: object specified more than once; extras ignored
-GameScene.obj : error LNK2019: unresolved external symbol "public: bool __thiscall Star::connect(class Star *)" (?connect@Star@@QAE_NPAV1@@Z) referenced in function "private: void __thiscall GameScene::generateLevel(void)" (?generateLevel@GameScene@@AAEXXZ)
-C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Uudistus.exe : fatal error LNK1120: 1 unresolved externals
+﻿  GameScene.cpp
+Debug\//Star.obj : warning LNK4042: object specified more than once; extras ignored
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Uudistus.exe
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Uudistus.pdb (Partial PDB)

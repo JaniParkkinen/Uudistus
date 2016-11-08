@@ -13,6 +13,7 @@ int main()
 
     Scene* current = new GameScene(&window);
 
+    printf_s("Starting game loop\n");
     while (window.isOpen())
     {
         sf::Event event;

@@ -1,0 +1,14 @@
+﻿  Component.cpp
+  GameObject.cpp
+  GameScene.cpp
+  InputManager.cpp
+  main.cpp
+  Star.cpp
+  Star.h
+  UudistusMath.cpp
+Release\//Star.obj : warning LNK4042: object specified more than once; extras ignored
+  Generating code
+  All 428 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Release\Uudistus.exe
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Release\Uudistus.pdb (Full PDB)

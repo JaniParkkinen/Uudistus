@@ -1,7 +1,9 @@
 #ifndef STAR_H
 #define STAR_H
 
-#include "GameObject.h"
+#include <vector>
+
+#include "Component.h"
 
 //struct Connection;
 
@@ -18,19 +20,27 @@ struct Connection
     float length;
 };
 
-class Star : public GameObject
+class Star : public Component
 {
 public:
-    Star(const int ID, const sf::Vector2f position, const int owner, sf::Texture* starTexture/*this from resource manager*/, const float energy = 100)
-        :GameObject(ID, position, owner, "star", starTexture, energy)
+    Star(GameObject* parent, const float energy = 100)
     {
-
+        m_gameObject = parent;
+        m_energy = energy;
     }
+    ~Star() {}
     bool connect(Star* target);
+
+    void update(float dt)override //const!
+    {
+        m_energy += dt / 10.f;
+    }
+    //bool isConnected(Star* target);
 
 //private:
     float m_energyTimer;
     float m_shipTimer;
+    float m_energy;
     std::vector<Connection> m_connections;
 };
 
