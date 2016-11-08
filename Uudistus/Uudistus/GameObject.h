@@ -16,13 +16,19 @@ public:
     //virtual void update(const float dt) = 0;
     //virtual void render(sf::RenderTarget* rt) = 0;
 
+    void update(const float dt);
     void setPosition(sf::Vector2f pos);
     void setPosition(float x, float y);
     void setSize(float size);
+    void setEnergy(float energy);
+    void setOwner(int owner);
 
     sf::Vector2f getPosition();
     sf::Sprite* getSprite();
     float getSize();
+    float getEnergy();
+    int getOwner();
+    std::string getType();
 
     float getDistanceToPoint(sf::Vector2f point);
     //float getDistanceToPoint(ud::Vec2 point);

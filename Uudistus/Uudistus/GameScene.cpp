@@ -6,6 +6,8 @@ GameScene::GameScene(sf::RenderWindow* window)
     :Scene(window)
 {
     tex.loadFromFile("assets/star.png");
+    shipTexture.loadFromFile("assets/ship.png");
+
     m_total_time = 0;
 
     m_rw = window;
@@ -20,6 +22,11 @@ void GameScene::update(float dt)
 
     m_total_time += dt;
 
+    for (GameObject* go : m_world)
+    {
+        go->update(dt);
+    }
+
     //selection
     if (m_input->mousePressed(MouseButton::Left))
     {
@@ -29,6 +36,23 @@ void GameScene::update(float dt)
             if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
             {
                 m_selected.push_back(go);
+            }
+        }
+    }
+    if (m_input->mousePressed(MouseButton::Right))
+    {
+        for (GameObject* go : m_world)
+        {
+            if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
+            {
+                for (GameObject* selected : m_selected)
+                {
+                    if (selected->getType() == "star")
+                    {
+                        createShip(selected->getPosition(),selected->getOwner(), selected->getEnergy(), go);
+                    }
+                }
+                break;
             }
         }
     }
@@ -98,8 +122,7 @@ void GameScene::generateLevel()
 bool GameScene::createStar(sf::Vector2f position, int owner, float energy)
 {
     //create GameObject
-
-    GameObject* go = new GameObject(m_starID++, position, 64, owner, "star", &tex);
+    GameObject* go = new GameObject(m_ID++, position, 64, owner, "star", &tex);
 
     for (Star* star : m_stars)
     {
@@ -111,6 +134,20 @@ bool GameScene::createStar(sf::Vector2f position, int owner, float energy)
 
     m_world.push_back(go);
     m_stars.push_back(newStar);
+
+    return true;
+}
+
+
+bool GameScene::createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed)
+{
+    GameObject* go = new GameObject(m_ID++, position, 32.f, owner, "ship", &shipTexture, energy);
+
+    Ship* newShip = new Ship(go ,target, speed);
+    go->addComponent(newShip);
+
+    m_world.push_back(go);
+    m_ships.push_back(newShip);
 
     return true;
 }

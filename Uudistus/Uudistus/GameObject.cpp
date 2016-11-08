@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Component.h"
 
 GameObject::GameObject(const int ID, const sf::Vector2f position, float size, const int owner, const std::string type, sf::Texture* texture, const float energy)
     :m_ID(ID),
@@ -18,6 +19,14 @@ GameObject::GameObject(const int ID, const sf::Vector2f position, float size, co
     }
 }
 
+void GameObject::update(const float dt)
+{
+    for (Component* comp : m_components)
+    {
+        comp->update(dt);
+    }
+}
+
 void GameObject::setPosition(sf::Vector2f pos)
 {
     setPosition(pos.x, pos.y);
@@ -34,6 +43,16 @@ void GameObject::setSize(float size)
     m_size = size;
 }
 
+void GameObject::setEnergy(float energy)
+{
+    m_energy = energy;
+}
+
+void GameObject::setOwner(int owner)
+{
+    m_owner = owner;
+}
+
 sf::Vector2f GameObject::getPosition()
 {
     return m_position;
@@ -47,6 +66,21 @@ sf::Sprite* GameObject::getSprite()
 float GameObject::getSize()
 {
     return m_size;
+}
+
+float GameObject::getEnergy()
+{
+    return m_energy;
+}
+
+int GameObject::getOwner()
+{
+    return m_owner;
+}
+
+std::string GameObject::getType()
+{
+    return m_type;
 }
 
 float GameObject::getDistanceToPoint(sf::Vector2f point)

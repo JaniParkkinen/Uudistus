@@ -31,7 +31,7 @@ public:
     ~Star() {}
     bool connect(Star* target);
 
-    void update(float dt)override //const!
+    void update(const float dt)override //const!
     {
         m_energy += dt / 10.f;
     }

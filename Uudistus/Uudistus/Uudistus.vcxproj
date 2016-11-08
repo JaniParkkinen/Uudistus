@@ -128,6 +128,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Ship.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Star.h" />
     <ClCompile Include="UudistusMath.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Ship.h" />
     <ClInclude Include="UudistusMath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

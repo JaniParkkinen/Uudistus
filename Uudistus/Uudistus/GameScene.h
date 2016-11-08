@@ -2,6 +2,7 @@
 #define GAME_SCENE_H
 
 #include "Star.h"
+#include "Ship.h"
 #include "Scene.h"
 #include "GameObject.h"
 
@@ -13,10 +14,12 @@ public:
     void render(sf::RenderTarget* rt)override;
 private:
     sf::Texture tex; //temp default texture
+    sf::Texture shipTexture; //temp ship texture
 
     void generateLevel();
 
     bool createStar(sf::Vector2f position, int owner, float energy = 100);
+    bool createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed = 5.0f);
 
     sf::Sprite* m_GUIBackground;
     //std::vector<Button*> m_menu;
@@ -24,11 +27,11 @@ private:
     std::vector<Star*> m_stars;
     //std::vector<GameObject*> m_stars;
     std::vector<GameObject*> m_selected;
-    //std::vector<Ship*> m_ships;
+    std::vector<Ship*> m_ships;
 
     float m_total_time;
 
-    int m_starID = 0;
+    int m_ID = 0;
 public: 
 
 };
