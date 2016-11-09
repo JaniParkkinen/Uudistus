@@ -36,7 +36,7 @@ void Ship::update(const float dt)
                 m_target->setOwner(go->getOwner());
             }
         }
-        //destroy self!
+        go->destroy();
     }
     else
     {

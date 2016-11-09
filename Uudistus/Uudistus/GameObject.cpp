@@ -1,5 +1,5 @@
 #include "GameObject.h"
-#include "Component.h"
+//#include "Component.h"
 
 GameObject::GameObject(const int ID, const sf::Vector2f position, float size, const int owner, const std::string type, sf::Texture* texture, const float energy)
     :m_ID(ID),
@@ -15,8 +15,17 @@ GameObject::GameObject(const int ID, const sf::Vector2f position, float size, co
         m_sprite->setPosition(position);
         float scale = m_size / texture->getSize().x;
         m_sprite->setScale(scale, scale);
-        m_sprite->setOrigin(texture->getSize().x / 2, texture->getSize().y / 2);
+        m_sprite->setOrigin(texture->getSize().x / 2.0f, texture->getSize().y / 2.0f);
     }
+}
+
+GameObject::~GameObject()
+{
+    for (Component* c : m_components)
+    {
+        delete c;
+    }
+    delete m_sprite;
 }
 
 void GameObject::update(const float dt)
@@ -106,13 +115,12 @@ int GameObject::getID()
     return m_ID;
 }
 
-//void GameObject::update(const float dt)
-//{
-//    m_sprite->setScale(0.5, 0.5);
-//    m_sprite->setPosition(m_position);
-//}
+void GameObject::destroy()
+{
+    m_isDestroyed = true;
+}
 
-//void GameObject::render(sf::RenderTarget* rt)
-//{
-//    rt->draw(*m_sprite);
-//}
+bool GameObject::isDestroyed()
+{
+    return m_isDestroyed;
+}

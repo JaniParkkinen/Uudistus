@@ -5,13 +5,11 @@
 
 #include "Component.h"
 
-//struct Connection;
-
 class Star;
 
 struct Connection
 {
-    Connection(Star* target, float length)
+    Connection::Connection(Star* target, float length)
     {
         this->target = target;
         this->length = length;
@@ -23,25 +21,20 @@ struct Connection
 class Star : public Component
 {
 public:
-    Star(GameObject* parent, const float energy = 100)
-    {
-        m_gameObject = parent;
-        m_energy = energy;
-    }
-    ~Star() {}
+    Star(GameObject* parent, const float energy = 100);
+    ~Star();
     bool connect(Star* target);
 
-    void update(const float dt)override //const!
-    {
-        m_energy += dt / 10.f;
-    }
+    void update(const float dt)override;
+
+    const std::vector<Connection*>& getConnections();
     //bool isConnected(Star* target);
 
-//private:
+private:
     float m_energyTimer;
     float m_shipTimer;
     float m_energy;
-    std::vector<Connection> m_connections;
+    std::vector<Connection*> m_connections;
 };
 
 #endif

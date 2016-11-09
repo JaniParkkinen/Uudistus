@@ -1,5 +1,9 @@
 #include "GameScene.h"
 
+#include "Star.h"
+#include "Ship.h"
+#include "GameObject.h"
+
 #define PI 3.14159265
 
 GameScene::GameScene(sf::RenderWindow* window)
@@ -56,6 +60,23 @@ void GameScene::update(float dt)
             }
         }
     }
+
+    //destroy all destroyed game objects
+    for (unsigned int i = 0; i < m_world.size(); i++)
+    {
+        if (m_world[i]->isDestroyed())
+        {
+            delete m_world[i];
+            m_world[i] = nullptr;
+
+            //move other objects
+            for (unsigned int j = i; j < m_world.size() - 1; j++)
+            {
+                m_world[j] = m_world[j + 1];
+            }
+            m_world.pop_back();
+        }
+    }
 }
 
 void GameScene::render(sf::RenderTarget* rt)
@@ -80,14 +101,14 @@ void GameScene::render(sf::RenderTarget* rt)
     //draw connections
     for (Star* star : m_stars)
     {
-        for (Connection c : star->m_connections)
+        for (Connection* c : star->getConnections())
         {
-            if (star->getGameObject()->getID() < c.target->getGameObject()->getID())
+            if (star->getGameObject()->getID() < c->target->getGameObject()->getID())
             {
                 sf::Vertex line[] =
                 {
                     sf::Vertex(star->getGameObject()->getPosition()),
-                    sf::Vertex(c.target->getGameObject()->getPosition())
+                    sf::Vertex(c->target->getGameObject()->getPosition())
                 };
                 line[0].color = sf::Color::Cyan;
                 line[1].color = sf::Color::Cyan;

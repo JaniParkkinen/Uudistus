@@ -6,7 +6,7 @@ class GameObject;
 class Component
 {
 public:
-    //Component() {};
+    Component() {};
     virtual void update(const float dt)=0;
 
     GameObject* getGameObject();

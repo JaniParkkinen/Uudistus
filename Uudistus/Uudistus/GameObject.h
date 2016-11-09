@@ -2,16 +2,16 @@
 #define GAMEOBJECT_H
 
 #include <SFML\Graphics.hpp>
-//#include "UudistusMath.h"
-//#include "Component.h"
+#include "Component.h"
 
 class Scene;
-class Component;
+//class Component;
 
 class GameObject
 {
 public:
     GameObject(const int ID, const sf::Vector2f position, float size, const int owner, const std::string type, sf::Texture* texture = nullptr, const float energy = 0);
+    ~GameObject();
 
     //virtual void update(const float dt) = 0;
     //virtual void render(sf::RenderTarget* rt) = 0;
@@ -42,15 +42,18 @@ public:
 
     Scene* getScene() { return m_scene; }
 
-    template<typename ComponentType>
-    ComponentType* GetComponent() {
-        for (unsigned int i = 0; i < m_components.size(); i++) {
-            if (ComponentType* cmp = dynamic_cast<ComponentType*>(m_components[i])) {
-                return cmp;
-            }
-        }
-        return NULL;
-    }
+    //template<typename ComponentType>
+    //ComponentType* GetComponent() {
+    //    for (unsigned int i = 0; i < m_components.size(); i++) {
+    //        if (ComponentType* cmp = dynamic_cast<ComponentType*>(m_components[i])) {
+    //            return cmp;
+    //        }
+    //    }
+    //    return NULL;
+    //}
+
+    void destroy();
+    bool isDestroyed();
 
 protected:
     sf::Sprite* m_sprite;
@@ -60,6 +63,7 @@ protected:
     float m_size;
     int m_owner;
     int m_ID;
+    bool m_isDestroyed;
     //int m_team;
 
     std::vector<Component*> m_components;

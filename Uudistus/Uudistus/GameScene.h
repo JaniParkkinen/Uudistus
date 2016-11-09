@@ -1,10 +1,15 @@
 #ifndef GAME_SCENE_H
 #define GAME_SCENE_H
 
-#include "Star.h"
-#include "Ship.h"
 #include "Scene.h"
-#include "GameObject.h"
+#include <vector>
+//#include "Star.h"
+//#include "Ship.h"
+//#include "GameObject.h"
+
+class Star;
+class Ship;
+class GameObject;
 
 class GameScene : public Scene
 {
