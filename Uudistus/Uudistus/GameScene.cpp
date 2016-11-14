@@ -2,7 +2,7 @@
 
 #include "Star.h"
 #include "Ship.h"
-#include "GameObject.h"
+#include <GameObject.h>
 
 #define PI 3.14159265
 
@@ -16,7 +16,7 @@ GameScene::GameScene(sf::RenderWindow* window)
 
     m_rw = window;
 
-    generateLevel();
+    //generateLevel();
 }
 
 void GameScene::update(float dt)
@@ -26,7 +26,7 @@ void GameScene::update(float dt)
 
     m_total_time += dt;
 
-    for (GameObject* go : m_world)
+    for (GameObject* go : m_objects)
     {
         go->update(dt);
     }
@@ -35,7 +35,7 @@ void GameScene::update(float dt)
     if (m_input->mousePressed(MouseButton::Left))
     {
         m_selected.clear();
-        for (GameObject* go : m_world)
+        for (GameObject* go : m_objects)
         {
             if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
             {
@@ -45,7 +45,7 @@ void GameScene::update(float dt)
     }
     if (m_input->mousePressed(MouseButton::Right))
     {
-        for (GameObject* go : m_world)
+        for (GameObject* go : m_objects)
         {
             if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
             {
@@ -53,7 +53,7 @@ void GameScene::update(float dt)
                 {
                     if (selected->getType() == "star")
                     {
-                        createShip(selected->getPosition(),selected->getOwner(), selected->getEnergy(), go);
+                        //createShip(selected->getPosition(),selected->getOwner(), selected->getEnergy(), go);
                     }
                 }
                 break;
@@ -62,21 +62,21 @@ void GameScene::update(float dt)
     }
 
     //destroy all destroyed game objects
-    for (unsigned int i = 0; i < m_world.size(); i++)
-    {
-        if (m_world[i]->isDestroyed())
-        {
-            delete m_world[i];
-            m_world[i] = nullptr;
+    //for (unsigned int i = 0; i < m_world.size(); i++)
+    //{
+    //    if (m_world[i]->isDestroyed())
+    //    {
+    //        delete m_world[i];
+    //        m_world[i] = nullptr;
 
-            //move other objects
-            for (unsigned int j = i; j < m_world.size() - 1; j++)
-            {
-                m_world[j] = m_world[j + 1];
-            }
-            m_world.pop_back();
-        }
-    }
+    //        //move other objects
+    //        for (unsigned int j = i; j < m_world.size() - 1; j++)
+    //        {
+    //            m_world[j] = m_world[j + 1];
+    //        }
+    //        m_world.pop_back();
+    //    }
+    //}
 }
 
 void GameScene::render(sf::RenderTarget* rt)

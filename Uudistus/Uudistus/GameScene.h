@@ -2,13 +2,12 @@
 #define GAME_SCENE_H
 
 #include "Scene.h"
+#include <World.h>
 #include <vector>
 //#include "Star.h"
 //#include "Ship.h"
 //#include "GameObject.h"
 
-class Star;
-class Ship;
 class GameObject;
 
 class GameScene : public Scene
@@ -21,18 +20,19 @@ private:
     sf::Texture tex; //temp default texture
     sf::Texture shipTexture; //temp ship texture
 
-    void generateLevel();
+    World m_world;
 
-    bool createStar(sf::Vector2f position, int owner, float energy = 100);
-    bool createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed = 5.0f);
+    //void generateLevel();
+
+    //bool createStar(sf::Vector2f position, int owner, float energy = 100);
+    //bool createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed = 5.0f);
 
     sf::Sprite* m_GUIBackground;
     //std::vector<Button*> m_menu;
-    std::vector<GameObject*> m_world;
-    std::vector<Star*> m_stars;
+    
     //std::vector<GameObject*> m_stars;
-    std::vector<GameObject*> m_selected;
-    std::vector<Ship*> m_ships;
+    std::vector<GameObject*> m_selected; //int?
+    std::vector<GameObject*> m_objects; //temp, will get this from m_world in the future
 
     float m_total_time;
 
