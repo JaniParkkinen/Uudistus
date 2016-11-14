@@ -25,7 +25,7 @@ const std::vector<Connection*>& Star::getConnections()
     return m_connections;
 }
 
-bool Star::connect(Star* target)
+bool Star::connect(const Star* target)
 {
     if (target == this)
         return false;
@@ -36,10 +36,10 @@ bool Star::connect(Star* target)
             return false;
     }
 
-    sf::Vector2f delta = target->getGameObject()->getPosition() - getGameObject()->getPosition();
-    float length = sqrt(delta.x*delta.x + delta.y*delta.y);
+    float deltaX = target->getGameObjectConst()->getX() -getGameObject()->getX();
+    float deltaY = target->getGameObjectConst()->getY() - getGameObject()->getY();
+    float length = sqrt(deltaX*deltaX + deltaY*deltaY);
 
     m_connections.push_back(new Connection(target, length));
-    target->connect(this);
     return true;
 }

@@ -1,5 +1,6 @@
 #include "Ship.h"
 #include "GameObject.h"
+#include <math.h>
 
 Ship::Ship(GameObject* parent, GameObject* target, float speed)
 {
@@ -7,16 +8,15 @@ Ship::Ship(GameObject* parent, GameObject* target, float speed)
     m_target = target;
     m_speed = speed;
 
-    sf::Vector2f delta = m_gameObject->getPosition() - m_target->getPosition();
-    m_gameObject->getSprite()->setRotation(atan2(delta.y, delta.x));
 }
 
 void Ship::update(const float dt)
 {
     GameObject* go = getGameObject();
 
-    sf::Vector2f delta = m_target->getPosition() - go->getPosition();
-    float distance = sqrt(delta.x*delta.x + delta.y*delta.y);
+    float deltaX = m_target->getX() - go->getX();
+    float deltaY = m_target->getY() - go->getY();
+    float distance = sqrt(deltaX*deltaX + deltaY*deltaY);
     
 
     if (distance < m_speed)
@@ -41,15 +41,13 @@ void Ship::update(const float dt)
     else
     {
         //move
-        delta.x /= distance;
-        delta.y /= distance;
+        deltaX /= distance;
+        deltaY /= distance;
 
-        delta.x *= m_speed * dt;
-        delta.y *= m_speed * dt;
+        deltaX *= m_speed * dt;
+        deltaY *= m_speed * dt;
 
-        go->setPosition(go->getPosition() + delta);
-
-        go->getSprite()->setPosition(go->getPosition());
+        go->setPosition(go->getX() + deltaX, go->getY() + deltaY);
 
     }
 }

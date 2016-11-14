@@ -9,13 +9,14 @@ class Star;
 
 struct Connection
 {
-    Connection::Connection(Star* target, float length)
+    Connection::Connection(const Star* target, const float length)
+        : target(target),
+        length(length)
     {
-        this->target = target;
-        this->length = length;
+
     }
-    Star* target;
-    float length;
+    const Star* target;
+    const float length;
 };
 
 class Star : public Component
@@ -23,7 +24,7 @@ class Star : public Component
 public:
     Star(GameObject* parent, const float energy = 100);
     ~Star();
-    bool connect(Star* target);
+    bool connect(const Star* target);
 
     void update(const float dt)override;
 

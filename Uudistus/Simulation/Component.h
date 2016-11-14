@@ -10,6 +10,7 @@ public:
     virtual void update(const float dt)=0;
 
     GameObject* getGameObject();
+    const GameObject* getGameObjectConst()const;
 
 protected:
     GameObject* m_gameObject;

@@ -3,7 +3,7 @@
 
 //#include <SFML\Graphics.hpp>
 #include "Component.h"
-
+#include <vector>
 class Scene;
 //class Component;
 
@@ -23,7 +23,8 @@ public:
     void setEnergy(float energy);
     void setOwner(int owner);
 
-    //sf::Vector2f getPosition();
+    const float getX()const;
+    const float getY()const;
     //sf::Sprite* getSprite();
     float getSize();
     float getEnergy();
@@ -33,7 +34,7 @@ public:
     //float getDistanceToPoint(sf::Vector2f point);
     //float getDistanceToPoint(ud::Vec2 point);
     float getDistanceToPoint(float x, float y);
-    int getID();
+    const int getID()const;
 
     void addComponent(Component* cmp)
     {
@@ -58,6 +59,7 @@ public:
 protected:
     //sf::Sprite* m_sprite;
     //sf::Vector2f m_position; //2x float or a new vector type?
+    float m_x, m_y;
     std::string m_type; //Enum?
     float m_energy;
     float m_size;

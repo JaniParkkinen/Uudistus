@@ -31,8 +31,7 @@ private:
     //std::vector<Button*> m_menu;
     
     //std::vector<GameObject*> m_stars;
-    std::vector<GameObject*> m_selected; //int?
-    std::vector<GameObject*> m_objects; //temp, will get this from m_world in the future
+    std::vector<GameObject*> m_selected;
 
     float m_total_time;
 

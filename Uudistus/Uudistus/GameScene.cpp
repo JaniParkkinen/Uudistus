@@ -16,17 +16,22 @@ GameScene::GameScene(sf::RenderWindow* window)
 
     m_rw = window;
 
-    //generateLevel();
+    int seed = 0;
+    //get seed from server
+
+    m_world.generateMap(seed);
 }
 
 void GameScene::update(float dt)
 {
+    const std::vector<GameObject*>& objects = m_world.getObjects();
+
     if (m_rw != nullptr)
         m_input->update(dt, m_rw);
 
     m_total_time += dt;
 
-    for (GameObject* go : m_objects)
+    for (GameObject* go : objects)
     {
         go->update(dt);
     }
@@ -35,9 +40,9 @@ void GameScene::update(float dt)
     if (m_input->mousePressed(MouseButton::Left))
     {
         m_selected.clear();
-        for (GameObject* go : m_objects)
+        for (GameObject* go : objects)
         {
-            if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
+            if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
             {
                 m_selected.push_back(go);
             }
@@ -45,9 +50,9 @@ void GameScene::update(float dt)
     }
     if (m_input->mousePressed(MouseButton::Right))
     {
-        for (GameObject* go : m_objects)
+        for (GameObject* go : objects)
         {
-            if (go->getDistanceToPoint(m_input->getMousePos()) < go->getSize())
+            if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
             {
                 for (GameObject* selected : m_selected)
                 {
@@ -93,22 +98,24 @@ void GameScene::render(sf::RenderTarget* rt)
     //    }
     //}
 
-    for (GameObject* go : m_world)
+    for (GameObject* go : m_world.getObjects())
     {
-        rt->draw(*go->getSprite());
+        //TODO switch case
     }
 
     //draw connections
-    for (Star* star : m_stars)
+    for (Star* star : m_world.getStars())
     {
         for (Connection* c : star->getConnections())
         {
-            if (star->getGameObject()->getID() < c->target->getGameObject()->getID())
+            GameObject* starObject = star->getGameObject();
+            const GameObject* targetObject = c->target->getGameObjectConst();
+            if (starObject->getID() < targetObject->getID())
             {
                 sf::Vertex line[] =
                 {
-                    sf::Vertex(star->getGameObject()->getPosition()),
-                    sf::Vertex(c->target->getGameObject()->getPosition())
+                    sf::Vertex(sf::Vector2f(starObject->getX(), starObject->getY())),
+                    sf::Vertex(sf::Vector2f(targetObject->getX(), targetObject->getY()))
                 };
                 line[0].color = sf::Color::Cyan;
                 line[1].color = sf::Color::Cyan;
@@ -127,48 +134,7 @@ void GameScene::render(sf::RenderTarget* rt)
     {
         selection.setRadius(go->getSize() / 2 + 32.f);
         selection.setOrigin(go->getSize(), go->getSize());
-        selection.setPosition(go->getPosition());
+        selection.setPosition(sf::Vector2f(go->getX(), go->getY()));
         rt->draw(selection);
     }
-}
-
-void GameScene::generateLevel()
-{
-    createStar(sf::Vector2f(64, 64), 0, 500);
-    createStar(sf::Vector2f(512, 64), 1, 400);
-
-    m_stars[0]->connect(m_stars[1]);
-}
-
-bool GameScene::createStar(sf::Vector2f position, int owner, float energy)
-{
-    //create GameObject
-    GameObject* go = new GameObject(m_ID++, position, 64, owner, "star", &tex);
-
-    for (Star* star : m_stars)
-    {
-        if (star->getGameObject()->getDistanceToPoint(position) < 256.0f)
-            return false;
-    }
-    Star* newStar = new Star(go, energy);
-    go->addComponent(newStar);
-
-    m_world.push_back(go);
-    m_stars.push_back(newStar);
-
-    return true;
-}
-
-
-bool GameScene::createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed)
-{
-    GameObject* go = new GameObject(m_ID++, position, 32.f, owner, "ship", &shipTexture, energy);
-
-    Ship* newShip = new Ship(go ,target, speed);
-    go->addComponent(newShip);
-
-    m_world.push_back(go);
-    m_ships.push_back(newShip);
-
-    return true;
 }
