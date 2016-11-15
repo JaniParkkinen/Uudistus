@@ -7,17 +7,19 @@
 class Scene;
 //class Component;
 
+enum ObjectType
+{
+    EStar,
+    EShip,
+};
+
 class GameObject
 {
 public:
-    GameObject(const int ID, const float x, const float y, float size, const int owner, const std::string type, const float energy = 0);
+    GameObject(const int ID, const float x, const float y, float size, const int owner, const ObjectType type, const float energy = 0);
     ~GameObject();
 
-    //virtual void update(const float dt) = 0;
-    //virtual void render(sf::RenderTarget* rt) = 0;
-
     void update(const float dt);
-    //void setPosition(sf::Vector2f pos);
     void setPosition(float x, float y);
     void setSize(float size);
     void setEnergy(float energy);
@@ -25,14 +27,11 @@ public:
 
     const float getX()const;
     const float getY()const;
-    //sf::Sprite* getSprite();
     float getSize();
     float getEnergy();
     int getOwner();
-    std::string getType();
+    ObjectType getType();
 
-    //float getDistanceToPoint(sf::Vector2f point);
-    //float getDistanceToPoint(ud::Vec2 point);
     float getDistanceToPoint(float x, float y);
     const int getID()const;
 
@@ -53,14 +52,14 @@ public:
     //    return NULL;
     //}
 
+    Component* getComponent();
+
     void destroy();
     bool isDestroyed();
 
 protected:
-    //sf::Sprite* m_sprite;
-    //sf::Vector2f m_position; //2x float or a new vector type?
     float m_x, m_y;
-    std::string m_type; //Enum?
+    ObjectType m_type;
     float m_energy;
     float m_size;
     int m_owner;

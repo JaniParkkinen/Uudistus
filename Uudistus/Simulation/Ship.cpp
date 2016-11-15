@@ -8,6 +8,12 @@ Ship::Ship(GameObject* parent, GameObject* target, float speed)
     m_target = target;
     m_speed = speed;
 
+    float deltaX = target->getX() - parent->getX();
+    float deltaY = target->getY() - parent->getY();
+
+    m_direction = atan2(deltaY, deltaX);
+
+    printf_s("Ship constructed\n");
 }
 
 void Ship::update(const float dt)
@@ -50,4 +56,9 @@ void Ship::update(const float dt)
         go->setPosition(go->getX() + deltaX, go->getY() + deltaY);
 
     }
+}
+
+float Ship::getDirection()
+{
+    return m_direction;
 }

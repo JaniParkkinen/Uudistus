@@ -12,6 +12,17 @@ GameScene::GameScene(sf::RenderWindow* window)
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
 
+    m_starSprite = sf::Sprite(tex);
+    m_shipSprite = sf::Sprite(shipTexture);
+
+    float scale = 64.f / tex.getSize().x;
+    m_starSprite.setScale(scale, scale);
+    m_starSprite.setOrigin(tex.getSize().x / 2.0f, tex.getSize().y / 2.0f);
+
+    scale = 32.f / shipTexture.getSize().x;
+    m_shipSprite.setScale(scale, scale);
+    m_shipSprite.setOrigin(shipTexture.getSize().x / 2.0f, shipTexture.getSize().y / 2.0f);
+
     m_total_time = 0;
 
     m_rw = window;
@@ -37,7 +48,7 @@ void GameScene::update(float dt)
     }
 
     //selection
-    if (m_input->mousePressed(MouseButton::Left))
+    if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
     {
         m_selected.clear();
         for (GameObject* go : objects)
@@ -45,6 +56,7 @@ void GameScene::update(float dt)
             if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
             {
                 m_selected.push_back(go);
+                break;
             }
         }
     }
@@ -52,36 +64,26 @@ void GameScene::update(float dt)
     {
         for (GameObject* go : objects)
         {
-            if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
+            if (go->getType() == EStar)
             {
-                for (GameObject* selected : m_selected)
+                if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
                 {
-                    if (selected->getType() == "star")
+                    for (GameObject* selected : m_selected)
                     {
-                        //createShip(selected->getPosition(),selected->getOwner(), selected->getEnergy(), go);
+                        if (selected->getType() == EStar)
+                        {
+                            m_world.createShip(selected->getX(), selected->getY(), selected->getOwner(), selected->getEnergy(), go, 10.0f);
+                        }
                     }
+                    break;
                 }
-                break;
             }
         }
     }
+    m_world.update(dt);
+    //TODO: remove deleted objects from m_selected
 
-    //destroy all destroyed game objects
-    //for (unsigned int i = 0; i < m_world.size(); i++)
-    //{
-    //    if (m_world[i]->isDestroyed())
-    //    {
-    //        delete m_world[i];
-    //        m_world[i] = nullptr;
 
-    //        //move other objects
-    //        for (unsigned int j = i; j < m_world.size() - 1; j++)
-    //        {
-    //            m_world[j] = m_world[j + 1];
-    //        }
-    //        m_world.pop_back();
-    //    }
-    //}
 }
 
 void GameScene::render(sf::RenderTarget* rt)
@@ -98,14 +100,13 @@ void GameScene::render(sf::RenderTarget* rt)
     //    }
     //}
 
-    for (GameObject* go : m_world.getObjects())
-    {
-        //TODO switch case
-    }
-
-    //draw connections
+    //draw stars and connections
     for (Star* star : m_world.getStars())
     {
+        //draw star
+        m_starSprite.setPosition(star->getGameObject()->getX(), star->getGameObject()->getY());
+        rt->draw(m_starSprite);
+
         for (Connection* c : star->getConnections())
         {
             GameObject* starObject = star->getGameObject();
@@ -122,6 +123,15 @@ void GameScene::render(sf::RenderTarget* rt)
                 rt->draw(line, 5, sf::Lines);
             }
         }
+    }
+
+    //draw ships
+    for (Ship* ship : m_world.getShips())
+    {
+        m_shipSprite.setRotation(ship->getDirection() * 180.f / 3.14159265f);
+
+        m_shipSprite.setPosition(ship->getGameObject()->getX(), ship->getGameObject()->getY());
+        rt->draw(m_shipSprite);
     }
 
     //draw selection

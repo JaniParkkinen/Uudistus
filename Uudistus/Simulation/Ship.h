@@ -10,9 +10,12 @@ public:
 
     void update(const float dt)override;
 
+    float getDirection();
+
 private:
     GameObject* m_target;
     float m_speed;
+    float m_direction;
 };
 
 #endif

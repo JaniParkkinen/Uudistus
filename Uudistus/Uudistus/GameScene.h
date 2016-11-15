@@ -20,6 +20,9 @@ private:
     sf::Texture tex; //temp default texture
     sf::Texture shipTexture; //temp ship texture
 
+    sf::Sprite m_starSprite;
+    sf::Sprite m_shipSprite;
+
     World m_world;
 
     //void generateLevel();

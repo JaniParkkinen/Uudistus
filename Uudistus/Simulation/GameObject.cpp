@@ -3,7 +3,7 @@
 #include <math.h>
 #include <string>
 
-GameObject::GameObject(const int ID, const float x, const float y, float size, const int owner, const std::string type, const float energy)
+GameObject::GameObject(const int ID, const float x, const float y, float size, const int owner, const ObjectType type, const float energy)
     :m_ID(ID),
     m_x(x),
     m_y(y),
@@ -78,9 +78,14 @@ int GameObject::getOwner()
     return m_owner;
 }
 
-std::string GameObject::getType()
+ObjectType GameObject::getType()
 {
     return m_type;
+}
+
+Component* GameObject::getComponent()
+{
+    return m_components[0];
 }
 
 //float GameObject::getDistanceToPoint(ud::Vec2 point)
