@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include <World.h>
 #include <vector>
+#include "NetworkManager.h"
 //#include "Star.h"
 //#include "Ship.h"
 //#include "GameObject.h"
@@ -25,17 +26,13 @@ private:
 
     World m_world;
 
-    //void generateLevel();
-
-    //bool createStar(sf::Vector2f position, int owner, float energy = 100);
-    //bool createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed = 5.0f);
-
     sf::Sprite* m_GUIBackground;
     //std::vector<Button*> m_menu;
-    
-    //std::vector<GameObject*> m_stars;
+
     std::vector<GameObject*> m_selected;
 
+    NetworkManager m_net;
+    
     float m_total_time;
 
     int m_ID = 0;

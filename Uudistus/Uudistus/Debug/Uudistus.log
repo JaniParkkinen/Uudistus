@@ -1,3 +1,5 @@
-﻿  main.cpp
+﻿  GameScene.cpp
+c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\gamescene.cpp(82): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\gamescene.cpp(138): warning C4018: '<': signed/unsigned mismatch
   Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.exe
   Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.pdb (Partial PDB)

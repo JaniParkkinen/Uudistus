@@ -7,8 +7,14 @@
 #define PI 3.14159265
 
 GameScene::GameScene(sf::RenderWindow* window)
-    :Scene(window)
+    :Scene(window),
+    m_net(&m_world, "127.0.0.1")
 {
+    //m_net.createStar(64, 64, 128, 1, 5);
+    //m_net.createStar(64, 128, 128, 2, 5);
+    //m_net.createStar(128, 64, 128, 3, 5);
+    //m_net.createStar(128, 128, 128, 4, 5);
+
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
 
@@ -73,6 +79,7 @@ void GameScene::update(float dt)
                         if (selected->getType() == EStar)
                         {
                             m_world.createShip(selected->getX(), selected->getY(), selected->getOwner(), selected->getEnergy(), go, 10.0f);
+                            m_net.createStar(m_input->getMousePos().x, m_input->getMousePos().y, 128, 4, 5);
                         }
                     }
                     break;
@@ -126,8 +133,11 @@ void GameScene::render(sf::RenderTarget* rt)
     }
 
     //draw ships
-    for (Ship* ship : m_world.getShips())
+    //for (Ship* ship : m_world.getShips())
+    const std::vector<Ship*> ships = m_world.getShips();
+    for(int i = 0; i < ships.size(); i++)
     {
+        Ship* ship = ships[i];
         m_shipSprite.setRotation(ship->getDirection() * 180.f / 3.14159265f);
 
         m_shipSprite.setPosition(ship->getGameObject()->getX(), ship->getGameObject()->getY());

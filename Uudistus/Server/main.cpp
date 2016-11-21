@@ -34,6 +34,7 @@ void main() {
 
     }
 }
+
 //END_OF_MAIN();
 void ServerLoop() {
 
@@ -60,9 +61,10 @@ void ServerLoop() {
                 (char*)event.peer->data, event.packet->data, event.channelID);
             fflush(stdout);
 
+            SendPacket(0, (char*)event.packet->data);
+
             enet_packet_destroy(event.packet); // clean up the packet now that we're done using it
 
-            SendPacket(0, "Data Received");
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT:
@@ -123,6 +125,4 @@ void InitNetwork() {
         exit(EXIT_FAILURE);
     }
     printf("Host Created at %s.\n", address.host);
-
-
 }
