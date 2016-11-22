@@ -14,15 +14,10 @@ public:
     ~NetworkManager();
 
     void createStar(int x, int y, int energy, int owner, int level);
-
-    void sendBuffer(char** buffer, int bufLength);
-
+    void sendShip(int id1, int id2);
 private:
 
-    //serialization
-    char** serializeCreateStar(int x, int y, int energy, int owner, int level);
     //char* createStation(int x, int y, int energy, int owner, int type);
-    //char* sendShip(int id1, int id2);
     //char* connect(int id1, int id2);
     //char* upgrade(int id);
     //end serialization

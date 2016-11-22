@@ -10,11 +10,6 @@ GameScene::GameScene(sf::RenderWindow* window)
     :Scene(window),
     m_net(&m_world, "127.0.0.1")
 {
-    //m_net.createStar(64, 64, 128, 1, 5);
-    //m_net.createStar(64, 128, 128, 2, 5);
-    //m_net.createStar(128, 64, 128, 3, 5);
-    //m_net.createStar(128, 128, 128, 4, 5);
-
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
 
@@ -48,9 +43,9 @@ void GameScene::update(float dt)
 
     m_total_time += dt;
 
-    for (GameObject* go : objects)
+    for (unsigned i = 0; i < objects.size(); i++)
     {
-        go->update(dt);
+        objects[i]->update(dt);
     }
 
     //selection
@@ -78,8 +73,7 @@ void GameScene::update(float dt)
                     {
                         if (selected->getType() == EStar)
                         {
-                            m_world.createShip(selected->getX(), selected->getY(), selected->getOwner(), selected->getEnergy(), go, 10.0f);
-                            m_net.createStar(m_input->getMousePos().x, m_input->getMousePos().y, 128, 4, 5);
+                            m_net.sendShip(selected->getID(), go->getID());
                         }
                     }
                     break;
@@ -108,14 +102,18 @@ void GameScene::render(sf::RenderTarget* rt)
     //}
 
     //draw stars and connections
-    for (Star* star : m_world.getStars())
+    const std::vector<Star*> stars = m_world.getStars();
+    for (unsigned i = 0; i < stars.size(); i++)
     {
+        Star* star = stars[i];
         //draw star
         m_starSprite.setPosition(star->getGameObject()->getX(), star->getGameObject()->getY());
         rt->draw(m_starSprite);
 
-        for (Connection* c : star->getConnections())
+        const std::vector<Connection*> connections = star->getConnections();
+        for (unsigned i = 0; i < connections.size(); i++)
         {
+            Connection* c = connections[i];
             GameObject* starObject = star->getGameObject();
             const GameObject* targetObject = c->target->getGameObjectConst();
             if (starObject->getID() < targetObject->getID())
@@ -135,7 +133,7 @@ void GameScene::render(sf::RenderTarget* rt)
     //draw ships
     //for (Ship* ship : m_world.getShips())
     const std::vector<Ship*> ships = m_world.getShips();
-    for(int i = 0; i < ships.size(); i++)
+    for(unsigned i = 0; i < ships.size(); i++)
     {
         Ship* ship = ships[i];
         m_shipSprite.setRotation(ship->getDirection() * 180.f / 3.14159265f);
@@ -150,8 +148,9 @@ void GameScene::render(sf::RenderTarget* rt)
     selection.setOutlineColor(sf::Color::White);
     selection.setOutlineThickness(2);
 
-    for (GameObject* go : m_selected)
+    for (unsigned i = 0; i < m_selected.size(); i++)
     {
+        GameObject* go = m_selected[i];
         selection.setRadius(go->getSize() / 2 + 32.f);
         selection.setOrigin(go->getSize(), go->getSize());
         selection.setPosition(sf::Vector2f(go->getX(), go->getY()));

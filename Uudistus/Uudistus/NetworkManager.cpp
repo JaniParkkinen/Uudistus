@@ -2,6 +2,27 @@
 #include <stdio.h>
 #include "World.h"
 
+#include <climits>
+
+//template <typename T>
+//T swap_endian(T u)
+//{
+//    static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
+//
+//    union
+//    {
+//        T u;
+//        unsigned char u8[sizeof(T)];
+//    } source, dest;
+//
+//    source.u = u;
+//
+//    for (size_t k = 0; k < sizeof(T); k++)
+//        dest.u8[k] = source.u8[sizeof(T) - k - 1];
+//
+//    return dest.u;
+//}
+
 NetworkManager::NetworkManager(World* world, std::string ip)
 {
     m_world = world;
@@ -43,16 +64,52 @@ void NetworkManager::clientLoop() {
         }
         case ENET_EVENT_TYPE_RECEIVE:
         {
+            int* messageType = (int*)event.packet->data;
 
-            std::string lol = "lol-\0";
-            if (strcmp((char*)event.packet->data, lol.c_str()) == 0)
+
+            printf_s("recieved: \n");
+            for (int i = 0; i < event.packet->dataLength; i++)
             {
-                if (m_world)
-                    m_world->createShip(0, 0, 5, 100, m_world->getObjects()[0], 10);
+                printf_s("%02x ", event.packet->data[i]);
             }
+            printf_s("\n");
 
-            printf("%s says %s on channel %u\n",
-                (char*)event.peer->data, event.packet->data, event.channelID);
+            switch (*messageType)
+            {
+            case 0:
+                printf_s("Game starts!");
+                break;
+            case 1:
+            {
+                int* message = (int*)event.packet->data;
+
+                printf_s("Creating a star...\n");
+
+                for (int i = 0; i < 6; i++)
+                {
+                    printf_s("%u ", *(message + i));
+                }
+
+                m_world->createStar(*(message + 1), *(message + 2), *(message + 3), *(message + 4));
+                break;
+            }
+            case 2:
+            {
+                int* message = (int*)event.packet->data;
+
+                printf_s("Sending a ship...\n");
+
+                for (int i = 0; i < 3; i++)
+                {
+                    printf_s("%u ", *(message + i));
+                }
+
+                m_world->sendShip(*(message + 1), *(message + 2));
+                break;
+            }
+            default:
+                break;
+            }
             fflush(stdout);
 
             enet_packet_destroy(event.packet); // clean up the packet now that we're done using it
@@ -110,31 +167,44 @@ void NetworkManager::initNetwork(std::string ip) {
 
 void NetworkManager::createStar(int x, int y, int energy, int owner, int level)
 {
-    //char** buf = serializeCreateStar(x, y, energy, owner, level);
-    char** buf = nullptr;
-    sendBuffer(buf, 0);
-}
+    const int size = 6 * sizeof(unsigned int);
+    unsigned buf2[6] = { 1, x, y, energy, owner, level };
 
-char** NetworkManager::serializeCreateStar(int x, int y, int energy, int owner, int level)
-{
-    char* buf = new char[5*sizeof(int)];
-    memcpy(buf + sizeof(int) * 0, &x, sizeof(int));
-    memcpy(buf + sizeof(int) * 1, &y, sizeof(int));
-    memcpy(buf + sizeof(int) * 2, &energy, sizeof(int));
-    memcpy(buf + sizeof(int) * 3, &owner, sizeof(int));
-    memcpy(buf + sizeof(int) * 4, &level, sizeof(int));
+    char* buf = (char*)buf2;
 
-    return &buf;
-}
+    printf_s("sending:\n");
+    for (int i = 0; i < 6; i++)
+    {
+        printf_s("%08x ", buf2[i]);
+    }
+    printf_s("\n");
 
-void NetworkManager::sendBuffer(char** buffer, int bufLength)
-{
     if (peer->data != 0)
     {
-        //ENetPacket * packet = enet_packet_create(buffer, bufLength, ENET_PACKET_FLAG_RELIABLE);
-        ENetPacket * packet = enet_packet_create("lol-\0", 5, ENET_PACKET_FLAG_RELIABLE);
+        ENetPacket * packet = enet_packet_create(buf2, size, ENET_PACKET_FLAG_RELIABLE);
+        enet_packet_resize(packet, size);
         enet_peer_send(peer, 0, packet);
+    }
+}
 
-        //delete[] *buffer;
+void NetworkManager::sendShip(int sender, int target)
+{
+    const int size = 3 * sizeof(int);
+    unsigned buf2[3] = { 2, sender, target };
+
+    char* buf = (char*)buf2;
+
+    printf_s("sending:\n");
+    for (int i = 0; i < 3; i++)
+    {
+        printf_s("%08x ", buf2[i]);
+    }
+    printf_s("\n");
+
+    if (peer->data != 0)
+    {
+        ENetPacket * packet = enet_packet_create(buf2, size, ENET_PACKET_FLAG_RELIABLE);
+        enet_packet_resize(packet, size);
+        enet_peer_send(peer, 0, packet);
     }
 }

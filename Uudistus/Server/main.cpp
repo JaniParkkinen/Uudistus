@@ -56,17 +56,29 @@ void ServerLoop() {
             break;
         }
         case ENET_EVENT_TYPE_RECEIVE:
-
+        {
             printf("%s says %s on channel %u\n",
                 (char*)event.peer->data, event.packet->data, event.channelID);
             fflush(stdout);
 
-            SendPacket(0, (char*)event.packet->data);
+            for (int i = 0; i < event.packet->dataLength; i++)
+            {
+                printf_s("%02x ", event.packet->data[i]);
+            }
+            printf_s("\n");
+
+            //echo back
+            ENetPacket * packet = enet_packet_create(event.packet->data,
+                event.packet->dataLength,
+                ENET_PACKET_FLAG_RELIABLE);
+            enet_peer_send(peer, 0, packet);
+            enet_host_flush(host);
+            //SendPacket(0, (char*)event.packet->data);
 
             enet_packet_destroy(event.packet); // clean up the packet now that we're done using it
 
             break;
-
+        }
         case ENET_EVENT_TYPE_DISCONNECT:
             printf("  host disconnected.\n");
             fflush(stdout);

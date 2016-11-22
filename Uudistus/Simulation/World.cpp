@@ -82,11 +82,12 @@ void World::createStar(const float x, const float y, const int owner, const floa
     //create GameObject
     GameObject* go = new GameObject(m_ID++, x, y, 64, owner, EStar, energy);
 
-    for (Star* star : m_stars)
-    {
-        if (star->getGameObject()->getDistanceToPoint(x, y) < 64.0f)
-            return;
-    }
+    //this will be done elsewhere
+    //for (Star* star : m_stars)
+    //{
+    //    if (star->getGameObject()->getDistanceToPoint(x, y) < 64.0f)
+    //        return;
+    //}
     Star* newStar = new Star(go, energy);
     go->addComponent(newStar);
 
@@ -104,6 +105,29 @@ void World::createShip(const float x, const float y, int owner, float energy, Ga
 
     m_objects.push_back(go);
     m_ships.push_back(newShip);
+}
+
+void World::sendShip(const int sender, const int target)
+{
+    Star* star1 = nullptr;
+    Star* star2 = nullptr;
+    for (int i = 0; i < m_stars.size(); i++)
+    {
+        if (m_stars[i]->getGameObject()->getID() == sender )
+        {
+            star1 = m_stars[i];
+        }
+        if (m_stars[i]->getGameObject()->getID() == target)
+        {
+            star2 = m_stars[i];
+        }
+    }
+
+    GameObject* go;
+    
+    go = star1->getGameObject();
+    createShip(go->getX(), go->getY(), go->getOwner(), go->getEnergy(), star2->getGameObject(), 10);
+
 }
 
 void World::connectStars(const Star* star1, const Star* star2)
