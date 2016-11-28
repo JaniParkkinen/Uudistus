@@ -130,8 +130,22 @@ void World::sendShip(const int sender, const int target)
 
 }
 
-void World::connectStars(const Star* star1, const Star* star2)
+void World::connectStars(const int id1, const int id2)
 {
+    Star* star1 = nullptr;
+    Star* star2 = nullptr;
+    for (int i = 0; i < m_stars.size(); i++)
+    {
+        if (m_stars[i]->getGameObject()->getID() == id1)
+        {
+            star1 = m_stars[i];
+        }
+        if (m_stars[i]->getGameObject()->getID() == id2)
+        {
+            star2 = m_stars[i];
+        }
+    }
+
     for (Star* star : m_stars)
     {
         if (star == star1)
@@ -151,5 +165,5 @@ void World::generateMap(int seed)
     createStar(256, 64, 2, 9001);
     createStar(64, 256, 3, 9001);
 
-    connectStars(m_stars[0], m_stars[1]);
+    connectStars(m_stars[0]->getGameObject()->getID(), m_stars[1]->getGameObject()->getID());
 }

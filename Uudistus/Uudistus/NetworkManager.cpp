@@ -4,34 +4,11 @@
 
 #include <climits>
 
-//template <typename T>
-//T swap_endian(T u)
-//{
-//    static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
-//
-//    union
-//    {
-//        T u;
-//        unsigned char u8[sizeof(T)];
-//    } source, dest;
-//
-//    source.u = u;
-//
-//    for (size_t k = 0; k < sizeof(T); k++)
-//        dest.u8[k] = source.u8[sizeof(T) - k - 1];
-//
-//    return dest.u;
-//}
-
 NetworkManager::NetworkManager(World* world, std::string ip)
 {
     m_world = world;
     printf("Constructing Network..\n");
     m_clientThread = std::thread(&NetworkManager::clientLoop, this);
-    //while (true)
-    //{
-    //    clientLoop();
-    //}
 }
 
 NetworkManager::~NetworkManager()
@@ -107,6 +84,21 @@ void NetworkManager::clientLoop() {
                 m_world->sendShip(*(message + 1), *(message + 2));
                 break;
             }
+            case 3:
+            {
+                int* message = (int*)event.packet->data;
+
+                printf_s("Connecting stars...\n");
+
+                for (int i = 0; i < 3; i++)
+                {
+                    printf_s("%u ", *(message + i));
+                }
+
+                m_world->connectStars(*(message + 1), *(message + 2));
+                break;
+            }
+                break;
             default:
                 break;
             }
@@ -191,6 +183,28 @@ void NetworkManager::sendShip(int sender, int target)
 {
     const int size = 3 * sizeof(int);
     unsigned buf2[3] = { 2, sender, target };
+
+    char* buf = (char*)buf2;
+
+    printf_s("sending:\n");
+    for (int i = 0; i < 3; i++)
+    {
+        printf_s("%08x ", buf2[i]);
+    }
+    printf_s("\n");
+
+    if (peer->data != 0)
+    {
+        ENetPacket * packet = enet_packet_create(buf2, size, ENET_PACKET_FLAG_RELIABLE);
+        enet_packet_resize(packet, size);
+        enet_peer_send(peer, 0, packet);
+    }
+}
+
+void NetworkManager::connect(int id1, int id2)
+{
+    const int size = 3 * sizeof(int);
+    unsigned buf2[3] = { 3, id1, id2 };
 
     char* buf = (char*)buf2;
 

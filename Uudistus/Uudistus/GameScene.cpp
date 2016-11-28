@@ -8,6 +8,7 @@
 
 GameScene::GameScene(sf::RenderWindow* window)
     :Scene(window),
+    m_mode(EModeDefault),
     m_net(&m_world, "127.0.0.1")
 {
     tex.loadFromFile("assets/star.png");
@@ -48,39 +49,81 @@ void GameScene::update(float dt)
         objects[i]->update(dt);
     }
 
-    //selection
-    if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
+    //change mode
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
     {
-        m_selected.clear();
-        for (GameObject* go : objects)
-        {
-            if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
-            {
-                m_selected.push_back(go);
-                break;
-            }
-        }
+        m_mode = EModeConnect;
     }
-    if (m_input->mousePressed(MouseButton::Right))
+
+    //default mode
+    if (m_mode == EModeDefault)
     {
-        for (GameObject* go : objects)
+        if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
         {
-            if (go->getType() == EStar)
+            m_selected.clear();
+            for (GameObject* go : objects)
             {
                 if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
                 {
-                    for (GameObject* selected : m_selected)
-                    {
-                        if (selected->getType() == EStar)
-                        {
-                            m_net.sendShip(selected->getID(), go->getID());
-                        }
-                    }
+                    m_selected.push_back(go);
                     break;
                 }
             }
         }
+        if (m_input->mousePressed(MouseButton::Right))
+        {
+            for (GameObject* go : objects)
+            {
+                if (go->getType() == EStar)
+                {
+                    if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
+                    {
+                        for (GameObject* selected : m_selected)
+                        {
+                            if (selected->getType() == EStar)
+                            {
+                                m_net.sendShip(selected->getID(), go->getID());
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
+    //connect
+    else if (m_mode == EModeConnect)
+    {
+        if (m_input->mousePressed(MouseButton::Left))
+        {
+            for (GameObject* go : objects)
+            {
+                if (go->getType() == EStar)
+                {
+                    if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
+                    {
+                        for (GameObject* selected : m_selected)
+                        {
+                            if (selected->getType() == EStar)
+                            {
+                                m_net.connect(selected->getID(), go->getID());
+                                m_mode = EModeDefault;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (m_input->mousePressed(MouseButton::Right))
+        {
+            m_mode = EModeDefault;
+        }
+    }
+    
+    
+
     m_world.update(dt);
     //TODO: remove deleted objects from m_selected
 

@@ -15,10 +15,10 @@ public:
 
     void createStar(int x, int y, int energy, int owner, int level);
     void sendShip(int id1, int id2);
+    void connect(int id1, int id2);
 private:
 
-    //char* createStation(int x, int y, int energy, int owner, int type);
-    //char* connect(int id1, int id2);
+    //char* createStation(int x, int y, int energy, int owner, int type);;
     //char* upgrade(int id);
     //end serialization
 

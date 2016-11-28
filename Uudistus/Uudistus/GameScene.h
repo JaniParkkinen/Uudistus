@@ -9,6 +9,14 @@
 //#include "Ship.h"
 //#include "GameObject.h"
 
+enum EMode
+{
+    EModeDefault,
+    EModeMenu,
+    EModeConnect,
+    EModeStation,
+};
+
 class GameObject;
 
 class GameScene : public Scene
@@ -36,6 +44,8 @@ private:
     float m_total_time;
 
     int m_ID = 0;
+
+    EMode m_mode;
 public: 
 
 };
