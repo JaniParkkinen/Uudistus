@@ -6,6 +6,7 @@
 //#include <thread>
 #include <vector>
 #include <World.h>
+//#include <chrono>
 
 #include <string.h>
 
@@ -16,8 +17,11 @@ public:
     ~Server();
 
 private:
-    void serverLoop();
     void initNetwork();
+    void serverLoop();
+    void eventLoop();
+    void processPacket(ENetPacket* packet);
+    void broadcast(ENetPacket* packet);
 
     std::vector<ENetPeer*> m_connections;
     //std::thread m_serverThread;
@@ -28,6 +32,10 @@ private:
     ENetAddress address;
 
     int m_tick;
+    int m_ok;
+    int m_nPlayers;
+    //float m_tickTimer;
+    std::vector<std::pair<ENetPacket*, int>> m_packets; //packet, tick
 
     bool m_stop;
 

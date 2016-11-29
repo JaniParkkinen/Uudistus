@@ -7,6 +7,7 @@
 NetworkManager::NetworkManager(World* world, std::string ip)
 {
     m_world = world;
+    m_tick = 0;
     printf("Constructing Network..\n");
     m_clientThread = std::thread(&NetworkManager::clientLoop, this);
 }
@@ -56,7 +57,17 @@ void NetworkManager::clientLoop() {
             case 0:
                 printf_s("Game starts!");
                 break;
-            case 1:
+            case 10:
+            {
+                unsigned buf[2] = { 10, m_tick };
+
+                ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+                enet_peer_send(peer, 0, packet2);
+                m_tick++;
+                //m_world->update(0.1f);
+                break;
+            }
+            case 11:
             {
                 int* message = (int*)event.packet->data;
 
@@ -67,10 +78,10 @@ void NetworkManager::clientLoop() {
                     printf_s("%u ", *(message + i));
                 }
 
-                m_world->createStar(*(message + 1), *(message + 2), *(message + 3), *(message + 4));
+                m_world->createStar(*(message + 2), *(message + 3), *(message + 4), *(message + 5));
                 break;
             }
-            case 2:
+            case 12:
             {
                 int* message = (int*)event.packet->data;
 
@@ -81,10 +92,10 @@ void NetworkManager::clientLoop() {
                     printf_s("%u ", *(message + i));
                 }
 
-                m_world->sendShip(*(message + 1), *(message + 2));
+                m_world->sendShip(*(message + 2), *(message + 3));
                 break;
             }
-            case 3:
+            case 13:
             {
                 int* message = (int*)event.packet->data;
 
@@ -95,10 +106,9 @@ void NetworkManager::clientLoop() {
                     printf_s("%u ", *(message + i));
                 }
 
-                m_world->connectStars(*(message + 1), *(message + 2));
+                m_world->connectStars(*(message + 2), *(message + 3));
                 break;
             }
-                break;
             default:
                 break;
             }
@@ -159,10 +169,8 @@ void NetworkManager::initNetwork(std::string ip) {
 
 void NetworkManager::createStar(int x, int y, int energy, int owner, int level)
 {
-    const int size = 6 * sizeof(unsigned int);
-    unsigned buf2[6] = { 1, x, y, energy, owner, level };
-
-    char* buf = (char*)buf2;
+    const int size = 7 * sizeof(unsigned int);
+    unsigned buf2[7] = { 11, m_tick, x, y, energy, owner, level };
 
     printf_s("sending:\n");
     for (int i = 0; i < 6; i++)
@@ -181,10 +189,8 @@ void NetworkManager::createStar(int x, int y, int energy, int owner, int level)
 
 void NetworkManager::sendShip(int sender, int target)
 {
-    const int size = 3 * sizeof(int);
-    unsigned buf2[3] = { 2, sender, target };
-
-    char* buf = (char*)buf2;
+    const int size = 4 * sizeof(int);
+    unsigned buf2[4] = { 12, m_tick, sender, target };
 
     printf_s("sending:\n");
     for (int i = 0; i < 3; i++)
@@ -203,10 +209,8 @@ void NetworkManager::sendShip(int sender, int target)
 
 void NetworkManager::connect(int id1, int id2)
 {
-    const int size = 3 * sizeof(int);
-    unsigned buf2[3] = { 3, id1, id2 };
-
-    char* buf = (char*)buf2;
+    const int size = 4 * sizeof(int);
+    unsigned buf2[4] = { 13, m_tick, id1, id2 };
 
     printf_s("sending:\n");
     for (int i = 0; i < 3; i++)

@@ -1,5 +1,2 @@
-﻿  Server.cpp
-c:\users\ollisal\documents\github\uudistus\uudistus\server\server.cpp(43): warning C4018: '<': signed/unsigned mismatch
-c:\users\ollisal\documents\github\uudistus\uudistus\server\server.cpp(127): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'enet_uint32'
-  Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Server.exe
+﻿  Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Server.exe
   Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Server.pdb (Partial PDB)

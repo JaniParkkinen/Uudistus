@@ -22,6 +22,8 @@ private:
     //char* upgrade(int id);
     //end serialization
 
+    int m_tick;
+
     World* m_world;
 
     void initNetwork(std::string ip);
