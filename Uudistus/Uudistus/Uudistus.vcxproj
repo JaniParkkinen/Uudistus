@@ -130,6 +130,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GuiArea.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -137,6 +138,7 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="GuiArea.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>

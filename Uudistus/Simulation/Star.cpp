@@ -3,6 +3,7 @@
 
 Star::Star(GameObject* parent, const float energy)
 {
+    printf_s("Star constructor\n");
     m_gameObject = parent;
     m_energy = energy;
 }

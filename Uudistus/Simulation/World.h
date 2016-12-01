@@ -14,8 +14,8 @@ public:
     void update(float dt);
     void createStar(const float x, const float y, const int owner, const float energy = 0);
     void createShip(const float x, const float y, const int owner, const float energy, GameObject* target, float speed);
-    //void sendShip(const Star* sender, const Star* target);
-    void connectStars(const Star* star1, const Star* star2);
+    void sendShip(const int sender, const int target);
+    void connectStars(const int star1, const int star2);
     void generateMap(int seed);
 
     const std::vector<GameObject*>& getObjects();
