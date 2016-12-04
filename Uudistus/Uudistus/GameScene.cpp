@@ -3,16 +3,23 @@
 #include "Star.h"
 #include "Ship.h"
 #include <GameObject.h>
+#include "GuiArea.h"
 
 #define PI 3.14159265
 
 GameScene::GameScene(sf::RenderWindow* window)
     :Scene(window),
     m_mode(EModeDefault),
-    m_net(&m_world, "127.0.0.1")
+    m_net(&m_world, "127.0.0.1"),
+    m_gui(600, 0, 200, 800, 16)
 {
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
+    guiTex.loadFromFile("assets/gui.png");
+
+    buttonUp.loadFromFile("assets/button_up.png");
+    buttonDown.loadFromFile("assets/button_down.png");
+    buttonHover.loadFromFile("assets/button_hover.png");
 
     m_starSprite = sf::Sprite(tex);
     m_shipSprite = sf::Sprite(shipTexture);
@@ -33,20 +40,53 @@ GameScene::GameScene(sf::RenderWindow* window)
     //get seed from server
 
     m_world.generateMap(seed);
+    //m_callbackLambda = new t_function(
+    //std::function<void(void)> f = std::bind(
+    //    ([=] {
+    //        printf_s("Test1\n");
+    //    }), this);
+
+
+    m_gui.setBackground(&guiTex);
+
+    m_gui.createButton("Test1", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+    m_gui.createButton("Test2", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+    m_gui.createButton("Test3", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+    m_gui.createButton("Test4", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+
+    m_gui.removeButton("Test3");
+}
+
+GameScene::~GameScene()
+{
+    delete m_callbackLambda;
+}
+
+void GameScene::temp()
+{
+    printf_s("Temp called!\n");
 }
 
 void GameScene::update(float dt)
 {
-    const std::vector<GameObject*>& objects = m_world.getObjects();
+    if (m_input->mousePressed(MouseButton::Left))
+    {
+        sf::Vector2f mPos = m_input->getMousePos();
+        printf_s("mouse position: %f, %f\n", mPos.x, mPos.y);
+    }
 
     if (m_rw != nullptr)
         m_input->update(dt, m_rw);
 
+    m_gui.update();
+
     m_total_time += dt;
 
+    const std::vector<GameObject*>& objects = m_world.getObjects();
     for (unsigned i = 0; i < objects.size(); i++)
     {
-        objects[i]->update(dt);
+        if (objects[i] != nullptr)
+            objects[i]->update(dt);
     }
 
     //change mode
@@ -199,4 +239,7 @@ void GameScene::render(sf::RenderTarget* rt)
         selection.setPosition(sf::Vector2f(go->getX(), go->getY()));
         rt->draw(selection);
     }
+
+    //draw GUI
+    m_gui.draw(rt);
 }

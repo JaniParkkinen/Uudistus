@@ -13,7 +13,7 @@ class Scene
 public:
 
     Scene(sf::RenderWindow* rw)
-        :m_input(new InputManager())
+        :m_input(InputManager::instance())
     {}
 
     virtual void update(const float dt) = 0;

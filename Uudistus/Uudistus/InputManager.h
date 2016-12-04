@@ -13,6 +13,8 @@ enum MouseButton
 class InputManager
 {
 public:
+    static InputManager* instance();
+
     bool mouseDown(MouseButton button);
     bool mousePressed(MouseButton button);
     bool mouseReleased(MouseButton button);
@@ -23,6 +25,10 @@ public:
     void update(const float dt, const sf::RenderWindow* window);
 
 private:
+    InputManager();
+
+    static InputManager* _instance;
+
     bool _mousePressed[3];
     bool _mouseDoubleClicked[3];
     bool _mouseReleased[3];

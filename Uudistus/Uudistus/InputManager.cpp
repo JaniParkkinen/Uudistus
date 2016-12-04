@@ -1,5 +1,31 @@
 #include "InputManager.h"
 
+InputManager* InputManager::_instance = nullptr;
+
+InputManager* InputManager::instance()
+{
+    if (_instance == nullptr)
+    {
+        _instance = new InputManager();
+    }
+
+    return _instance;
+}
+
+InputManager::InputManager()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        _mousePressed[i] = false;
+        _mouseDoubleClicked[i] = false;
+        _mouseReleased[i] = false;
+        _mouseDown[i] = false;
+        _doubleClickTimer[i] = 0;
+    }
+
+    _mousePos = sf::Vector2f(0.f, 0.f);
+}
+
 bool InputManager::mouseDown(MouseButton button)
 {
     return _mouseDown[button];

@@ -21,7 +21,8 @@ private:
     int x, y, w, h;
     bool m_isActive;
     bool m_isPressed;
-    sf::Sprite** m_background[3];
+    sf::Texture* m_bgTexture[3];
+    sf::Sprite m_bgSprite;
     t_function m_callback;
 };
 

@@ -12,8 +12,8 @@ public:
     void draw(sf::RenderTarget* rt);
     void update();
 
-    void setBackground(sf::Texture texture, float alpha = 1.0f);
-    void createButton(std::string name, sf::Texture* buttons, t_function callback);
+    void setBackground(sf::Texture* texture, float alpha = 1.0f);
+    void createButton(std::string name, t_function callback, sf::Texture* up, sf::Texture* down = nullptr, sf::Texture* hover = nullptr);
     void clearButtons();
     void removeButton(std::string name);
     void setActive(bool active);
@@ -29,7 +29,7 @@ private:
     int m_columns;
     bool m_isVisible;
     sf::Sprite m_background;
-    std::map<std::string, Button> m_buttons;
+    std::map<std::string, Button*> m_buttons;
 };
 
 #endif // ! 
