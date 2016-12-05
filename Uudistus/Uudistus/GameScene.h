@@ -26,7 +26,7 @@ public:
     GameScene(sf::RenderWindow* window);
     ~GameScene();
     void update(const float dt)override;
-    void render(sf::RenderTarget* rt)override;
+    void draw(sf::RenderTarget* rt)override;
 
     void temp();
 private:

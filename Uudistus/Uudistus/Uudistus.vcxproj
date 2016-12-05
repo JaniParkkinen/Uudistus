@@ -126,8 +126,8 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="GUI.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GuiArea.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
@@ -135,9 +135,9 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="GameScene.h" />
-    <ClInclude Include="GUI.h" />
     <ClInclude Include="GuiArea.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>

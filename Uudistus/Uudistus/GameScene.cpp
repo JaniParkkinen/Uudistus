@@ -83,11 +83,6 @@ void GameScene::update(float dt)
     m_total_time += dt;
 
     const std::vector<GameObject*>& objects = m_world.getObjects();
-    for (unsigned i = 0; i < objects.size(); i++)
-    {
-        if (objects[i] != nullptr)
-            objects[i]->update(dt);
-    }
 
     //change mode
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
@@ -164,13 +159,13 @@ void GameScene::update(float dt)
     
     
 
-    m_world.update(dt);
+    //m_world.update(dt);
     //TODO: remove deleted objects from m_selected
 
 
 }
 
-void GameScene::render(sf::RenderTarget* rt)
+void GameScene::draw(sf::RenderTarget* rt)
 {
     ////draw grid
     //sf::RectangleShape square(sf::Vector2f(32, 32));

@@ -18,7 +18,7 @@ public:
 
     virtual void update(const float dt) = 0;
 
-    virtual void render(sf::RenderTarget* rt) = 0;
+    virtual void draw(sf::RenderTarget* rt) = 0;
 
     void setWindow(sf::RenderWindow* renderWindow)
     {

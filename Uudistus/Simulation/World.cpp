@@ -27,6 +27,13 @@ const std::vector<Ship*>& World::getShips()
 
 void World::update(const float dt)
 {
+    //const std::vector<GameObject*>& objects = getObjects();
+    for (unsigned i = 0; i < m_objects.size(); i++)
+    {
+        if (m_objects[i] != nullptr)
+            m_objects[i]->update(dt);
+    }
+
     //destroy all destroyed game objects
     for (unsigned int i = 0; i < m_objects.size(); i++)
     {

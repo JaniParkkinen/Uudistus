@@ -28,7 +28,7 @@ int main()
 
         window.clear();
 
-        current->render(&window);
+        current->draw(&window);
         //window.draw(shape);
         window.display();
     }

@@ -64,7 +64,7 @@ void NetworkManager::clientLoop() {
                 ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
                 enet_peer_send(peer, 0, packet2);
                 m_tick++;
-                //m_world->update(0.1f);
+                m_world->update(0.1f);
                 break;
             }
             case 11:
