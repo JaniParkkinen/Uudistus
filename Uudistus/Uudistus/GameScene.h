@@ -2,43 +2,63 @@
 #define GAME_SCENE_H
 
 #include "Scene.h"
+#include <World.h>
 #include <vector>
+#include "NetworkManager.h"
+#include "GuiArea.h"
 //#include "Star.h"
 //#include "Ship.h"
 //#include "GameObject.h"
 
-class Star;
-class Ship;
+enum EMode
+{
+    EModeDefault,
+    EModeMenu,
+    EModeConnect,
+    EModeStation,
+};
+
 class GameObject;
 
 class GameScene : public Scene
 {
 public:
     GameScene(sf::RenderWindow* window);
+    ~GameScene();
     void update(const float dt)override;
     void render(sf::RenderTarget* rt)override;
+
+    void temp();
 private:
     sf::Texture tex; //temp default texture
     sf::Texture shipTexture; //temp ship texture
+    sf::Texture guiTex; //GUI bg
 
-    void generateLevel();
+    sf::Texture buttonUp;
+    sf::Texture buttonDown;
+    sf::Texture buttonHover;
 
-    bool createStar(sf::Vector2f position, int owner, float energy = 100);
-    bool createShip(sf::Vector2f position, int owner, float energy, GameObject* target, float speed = 5.0f);
+    sf::Sprite m_starSprite;
+    sf::Sprite m_shipSprite;
 
-    sf::Sprite* m_GUIBackground;
+    t_function* m_callbackLambda;
+
+    GUIArea m_gui;
+
+    World m_world;
+
+    //sf::Sprite* m_GUIBackground;
     //std::vector<Button*> m_menu;
-    std::vector<GameObject*> m_world;
-    std::vector<Star*> m_stars;
-    //std::vector<GameObject*> m_stars;
-    std::vector<GameObject*> m_selected;
-    std::vector<Ship*> m_ships;
 
+    std::vector<GameObject*> m_selected;
+
+    NetworkManager m_net;
+    
     float m_total_time;
 
     int m_ID = 0;
-public: 
 
+    EMode m_mode;
 };
 
 #endif
