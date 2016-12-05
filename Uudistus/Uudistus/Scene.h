@@ -8,12 +8,16 @@
 
 //class GameObject;
 
+class SceneManager;
+
 class Scene
 {
 public:
 
-    Scene(sf::RenderWindow* rw)
-        :m_input(InputManager::instance())
+	Scene(sf::RenderWindow* rw, SceneManager* sm)
+		:m_input(InputManager::instance()),
+		m_sm(sm)
+
     {}
 
     virtual void update(const float dt) = 0;
@@ -34,6 +38,8 @@ protected:
     //std::vector<GameObject*> gameObjects;
     InputManager* m_input;
     sf::RenderWindow* m_rw;
+	SceneManager* m_sm;
+	//NetworkManager* m_nm;
 };
 
 #endif

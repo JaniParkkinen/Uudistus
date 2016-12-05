@@ -1,20 +1,24 @@
 #include <SFML\Graphics.hpp>
 #include <World.h>
 
-#include "GameScene.h"
+#include "LobbyScene.h"
+#include "SceneManager.h"
+#include "NetworkManager.h"
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "Galactic Uudistus");
-
     window.setFramerateLimit(60);
 
     sf::CircleShape shape(256.f);
     shape.setFillColor(sf::Color(0, 25, 10));
 
-    Scene* current = new GameScene(&window);
-
+	//Scene* lobby = new LobbyScene(&window);
+    //Scene* current = new GameScene(&window);
+	SceneManager sm;
+	
     printf_s("Starting game loop\n");
+	sm.changeScene(new LobbyScene(&window, &sm));
     while (window.isOpen())
     {
         sf::Event event;
@@ -24,12 +28,16 @@ int main()
                 window.close();
         }
 
-        current->update(0.1f);
+		//lobby->update(0.1f);
+		//current->update(0.1f);
 
+		sm.update(0.1f);
         window.clear();
 
-        current->draw(&window);
-        //window.draw(shape);
+		sm.draw(&window);
+		//lobby->draw(&window);
+		//current->draw(&window);
+		//window.draw(shape);
         window.display();
     }
     return 0;

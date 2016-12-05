@@ -131,6 +131,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GuiArea.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Simulation\Simulation.vcxproj">

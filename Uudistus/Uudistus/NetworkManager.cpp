@@ -4,23 +4,25 @@
 
 #include <climits>
 
-NetworkManager::NetworkManager(World* world, std::string ip)
+NetworkManager* NetworkManager::nm = nullptr;
+
+NetworkManager::NetworkManager()
 {
-    m_world = world;
+    m_world = nullptr;
     m_tick = 0;
     printf("Constructing Network..\n");
-    m_clientThread = std::thread(&NetworkManager::clientLoop, this);
+    //m_clientThread = std::thread(&NetworkManager::clientLoop, this);
+	initNetwork("127.0.0.1");
 }
 
-NetworkManager::~NetworkManager()
-{
-    //TODO
-}
+//NetworkManager::~NetworkManager()
+//{
+//    //TODO
+//}
 
 void NetworkManager::clientLoop() {
     printf("Client thread started\n");
 
-    initNetwork("127.0.0.1");
     // processing incoming events:
     while(true)
     while (enet_host_service(host, &event, 50) > 0) {
@@ -129,7 +131,15 @@ void NetworkManager::clientLoop() {
     }
 }
 
+void NetworkManager::setWorld()
+{
+
+}
+
 void NetworkManager::initNetwork(std::string ip) {
+
+	if (host)
+		return;
 
     if (enet_initialize() != 0)
     {
@@ -164,6 +174,8 @@ void NetworkManager::initNetwork(std::string ip) {
         fprintf(stderr, "No available peers for initiating an ENet connection.\n");
         exit(EXIT_FAILURE);
     }
+
+	m_clientThread = std::thread(&NetworkManager::clientLoop, this);
 
 }
 

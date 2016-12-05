@@ -10,13 +10,20 @@ class World;
 class NetworkManager
 {
 public:
-    NetworkManager(World* world, std::string ip); //connect
-    ~NetworkManager();
+	static NetworkManager* instance() {
+		return (!nm) ?
+			nm = new NetworkManager() :
+			nm;
+	}
 
+	void setWorld();
+	void initNetwork(std::string ip);
     void createStar(int x, int y, int energy, int owner, int level);
     void sendShip(int id1, int id2);
     void connect(int id1, int id2);
 private:
+	NetworkManager(); //connect
+	static NetworkManager* nm;
 
     //char* createStation(int x, int y, int energy, int owner, int type);;
     //char* upgrade(int id);
@@ -26,7 +33,6 @@ private:
 
     World* m_world;
 
-    void initNetwork(std::string ip);
     void clientLoop();
 
     std::thread m_clientThread;

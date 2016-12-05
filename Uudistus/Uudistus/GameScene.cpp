@@ -7,10 +7,9 @@
 
 #define PI 3.14159265
 
-GameScene::GameScene(sf::RenderWindow* window)
-    :Scene(window),
+GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
+    :Scene(window, sm),
     m_mode(EModeDefault),
-    m_net(&m_world, "127.0.0.1"),
     m_gui(600, 0, 200, 800, 16)
 {
     tex.loadFromFile("assets/star.png");
@@ -35,6 +34,7 @@ GameScene::GameScene(sf::RenderWindow* window)
     m_total_time = 0;
 
     m_rw = window;
+	m_sm = sm;
 
     int seed = 0;
     //get seed from server
@@ -117,7 +117,7 @@ void GameScene::update(float dt)
                         {
                             if (selected->getType() == EStar)
                             {
-                                m_net.sendShip(selected->getID(), go->getID());
+                                NetworkManager::instance()->sendShip(selected->getID(), go->getID());
                             }
                         }
                         break;
@@ -141,7 +141,7 @@ void GameScene::update(float dt)
                         {
                             if (selected->getType() == EStar)
                             {
-                                m_net.connect(selected->getID(), go->getID());
+								NetworkManager::instance()->connect(selected->getID(), go->getID());
                                 m_mode = EModeDefault;
                             }
                         }

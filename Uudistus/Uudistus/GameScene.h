@@ -23,7 +23,7 @@ class GameObject;
 class GameScene : public Scene
 {
 public:
-    GameScene(sf::RenderWindow* window);
+    GameScene(sf::RenderWindow* window, SceneManager* sm);
     ~GameScene();
     void update(const float dt)override;
     void draw(sf::RenderTarget* rt)override;
@@ -52,7 +52,6 @@ private:
 
     std::vector<GameObject*> m_selected;
 
-    NetworkManager m_net;
     
     float m_total_time;
 
