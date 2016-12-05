@@ -42,6 +42,7 @@ void World::update(const float dt)
             switch (m_objects[i]->getType())
             {
             case EStar:
+                m_starLock.lock();
                 for (unsigned j = 0; j < m_stars.size(); j++)
                 {
                     if (static_cast<Star*>(m_objects[i]->getComponent()) == m_stars[j])
@@ -53,8 +54,10 @@ void World::update(const float dt)
                         m_stars.pop_back();
                     }
                 }
+                m_starLock.unlock();
                 break;
             case EShip:
+                m_shipLock.lock();
                 for (unsigned j = 0; j < m_ships.size(); j++)
                 {
                     if (static_cast<Ship*>(m_objects[i]->getComponent()) == m_ships[j])
@@ -66,6 +69,7 @@ void World::update(const float dt)
                         m_ships.pop_back();
                     }
                 }
+                m_shipLock.unlock();
                 break;
             default:
                 break;
@@ -98,8 +102,10 @@ void World::createStar(const float x, const float y, const int owner, const floa
     Star* newStar = new Star(go, energy);
     go->addComponent(newStar);
 
+    m_starLock.lock();
     m_objects.push_back(go);
     m_stars.push_back(newStar);
+    m_starLock.unlock();
 }
 
 
@@ -110,8 +116,10 @@ void World::createShip(const float x, const float y, int owner, float energy, Ga
     Ship* newShip = new Ship(go, target, speed);
     go->addComponent(newShip);
 
+    m_shipLock.lock();
     m_objects.push_back(go);
     m_ships.push_back(newShip);
+    m_shipLock.unlock();
 }
 
 void World::sendShip(const int sender, const int target)

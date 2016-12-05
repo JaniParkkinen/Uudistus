@@ -59,5 +59,8 @@
     <ClInclude Include="LobbyScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUIElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

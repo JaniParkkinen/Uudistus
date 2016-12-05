@@ -15,7 +15,7 @@ GUIArea::GUIArea(int x, int y, int w, int h, int rows, int columns)
 
 GUIArea::~GUIArea()
 {
-    for (std::pair<std::string, Button*> b : m_buttons)
+    for (std::pair<std::string, GUIElement*> b : m_buttons)
     {
         delete b.second;
     }
@@ -26,7 +26,7 @@ void GUIArea::draw(sf::RenderTarget* rt)
     if (m_isVisible)
     {
         rt->draw(m_background);
-        for (std::pair<std::string, Button*> b : m_buttons)
+        for (std::pair<std::string, GUIElement*> b : m_buttons)
         {
             b.second->draw(rt);
         }
@@ -37,7 +37,7 @@ void GUIArea::update()
 {
     if (m_isVisible)
     {
-        for (std::pair<std::string, Button*> b : m_buttons)
+        for (std::pair<std::string, GUIElement*> b : m_buttons)
         {
             b.second->update();
         }
@@ -55,11 +55,14 @@ void GUIArea::setBackground(sf::Texture* texture, float alpha)
 
 void GUIArea::createButton(std::string name, t_function callback, sf::Texture* up, sf::Texture* down, sf::Texture* hover)
 {
-    int size = m_buttons.size();
-    int x = m_x;
-    int y = m_y + (m_h / m_rows) * size;
+    int elementW = (m_w - m_xBorder * 2 - (m_xElementMargin * (m_columns - 1))) / m_columns;
+    int elementH = (m_h - m_yBorder * 2 - (m_yElementMargin * (m_rows - 1))) / m_rows;
 
-    Button* button = new Button(x, y, m_w / m_columns, m_h / m_rows, callback, up, down, hover);
+    int size = m_buttons.size();
+    int x = m_x + m_xBorder + (elementW + m_xElementMargin) * (size % m_columns);
+    int y = m_y + m_yBorder + (elementH + m_yElementMargin) * (size / m_columns);
+
+    Button* button = new Button(x, y, elementW, elementH, callback, up, down, hover);
     //std::pair<std::string, Button*> buttonPair(name, button);
     //m_buttons.insert(buttonPair);
 
@@ -83,7 +86,7 @@ void GUIArea::removeButton(std::string name)
 
 void GUIArea::setActive(bool active)
 {
-    for (std::pair<std::string, Button*> b : m_buttons)
+    for (std::pair<std::string, GUIElement*> b : m_buttons)
     {
         b.second->setActive(active);
     }
@@ -106,7 +109,20 @@ void GUIArea::setArea(int x, int y, int w, int h)
     m_w = w;
     m_h = h;
     m_background.setPosition(x, y);
+
     float xScale = (float)m_w / m_background.getTexture()->getSize().x;
     float yScale = (float)m_h / m_background.getTexture()->getSize().y;
     m_background.setScale(xScale, yScale);
+}
+
+void GUIArea::setBorder(int x, int y)
+{
+    m_xBorder = x;
+    m_yBorder = y;
+}
+
+void GUIArea::setElementMargin(int x, int y)
+{
+    m_xElementMargin = x;
+    m_yElementMargin = y;
 }

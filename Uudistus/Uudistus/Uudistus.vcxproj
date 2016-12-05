@@ -136,6 +136,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GuiArea.h" />
+    <ClInclude Include="GUIElement.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="NetworkManager.h" />

@@ -4,7 +4,7 @@ LobbyScene::LobbyScene(sf::RenderWindow* rw) :
     Scene(rw),
     m_gui(200, 50, 400, 400, 4, 1)
 {
-    m_gui.createButton("ready", std::bind(&LobbyScene::ready, this), )
+    //m_gui.createButton("ready", std::bind(&LobbyScene::ready, this), )
 }
 
 LobbyScene::~LobbyScene()

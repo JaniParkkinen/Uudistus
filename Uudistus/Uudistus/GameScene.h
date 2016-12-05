@@ -59,6 +59,21 @@ private:
     int m_ID = 0;
 
     EMode m_mode;
+
+    //TODO: make this global?
+    const sf::Color m_playerColor[10]
+    {
+        sf::Color(0, 255, 0), //player0
+        sf::Color(0, 0, 255),
+        sf::Color(255, 0, 0),
+        sf::Color(0, 255, 255),
+        sf::Color(255, 0, 255),
+        sf::Color(255, 255, 0),
+        sf::Color(255, 127, 0),
+        sf::Color(127, 127, 0),
+        sf::Color(255, 255, 255), //unoccupied
+        sf::Color(32, 32, 32), //unknown
+    };
 };
 
 #endif

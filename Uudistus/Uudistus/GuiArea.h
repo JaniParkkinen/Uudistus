@@ -20,6 +20,8 @@ public:
     void setActive(std::string name, bool active);
     void setVisible(bool visible);
     void setArea(int x, int y, int w, int h);
+    void setBorder(int x, int y); //TODO: top, bottom, left, right margins
+    void setElementMargin(int x, int y);
 private:
     int m_x;
     int m_y;
@@ -27,9 +29,13 @@ private:
     int m_h;
     int m_rows;
     int m_columns;
+    int m_xElementMargin;
+    int m_yElementMargin;
+    int m_xBorder;
+    int m_yBorder;
     bool m_isVisible;
     sf::Sprite m_background;
-    std::map<std::string, Button*> m_buttons;
+    std::map<std::string, GUIElement*> m_buttons;
 };
 
 #endif // ! 
