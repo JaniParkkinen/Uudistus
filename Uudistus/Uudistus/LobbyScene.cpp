@@ -10,13 +10,19 @@ LobbyScene::LobbyScene(sf::RenderWindow* rw, SceneManager* sm) :
 	readyDown.loadFromFile("assets/ready_down.png");
 	readyUp.loadFromFile("assets/ready_up.png");
 	readyHover.loadFromFile("assets/ready_hover.png");
+	discDown.loadFromFile("assets/disconnect_down.png");
+	discUp.loadFromFile("assets/disconnect_up.png");
+	discHover.loadFromFile("assets/disconnect_hover.png");
 
 	m_total_time = 0;
 
 	m_rw = rw;
 	m_sm = sm;
 
+	
 	m_gui.createButton("ready", std::bind(&LobbyScene::ready, this), &readyUp, &readyDown, &readyHover);
+	m_gui.createButton("disconnect", std::bind(&LobbyScene::disconnect, this), &discUp, &discDown, &discHover);
+
 }
 
 LobbyScene::~LobbyScene()
@@ -52,7 +58,19 @@ void LobbyScene::playerList()
 
 }
 
+void LobbyScene::readyCheck()
+{
+
+}
+
 void LobbyScene::ready()
 {
-	m_sm->changeScene(new GameScene(m_rw, m_sm));
+	//if(isReady == true)
+		m_sm->changeScene(new GameScene(m_rw, m_sm));
 }
+
+void LobbyScene::disconnect()
+{
+	printf_s("Player disconnected\n");
+}
+

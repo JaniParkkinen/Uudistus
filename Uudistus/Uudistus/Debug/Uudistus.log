@@ -1,9 +1,3 @@
-﻿  NetworkManager.cpp
-c:\users\janipar\documents\github\uudistus\uudistus\uudistus\networkmanager.cpp(51): warning C4018: '<': signed/unsigned mismatch
-c:\users\janipar\documents\github\uudistus\uudistus\uudistus\networkmanager.cpp(64): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-c:\users\janipar\documents\github\uudistus\uudistus\uudistus\networkmanager.cpp(83): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-c:\users\janipar\documents\github\uudistus\uudistus\uudistus\networkmanager.cpp(185): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-c:\users\janipar\documents\github\uudistus\uudistus\uudistus\networkmanager.cpp(205): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-c:\users\janipar\documents\github\uudistus\uudistus\uudistus\networkmanager.cpp(225): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+﻿  LobbyScene.cpp
   Uudistus.vcxproj -> C:\Users\JaniPar\Documents\GitHub\Uudistus\Uudistus\Debug\Client.exe
   Uudistus.vcxproj -> C:\Users\JaniPar\Documents\GitHub\Uudistus\Uudistus\Debug\Client.pdb (Partial PDB)
