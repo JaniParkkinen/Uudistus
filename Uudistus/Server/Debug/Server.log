@@ -1,7 +1,2 @@
-﻿  Server.cpp
-c:\users\janipar\documents\github\uudistus\uudistus\server\server.cpp(51): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-c:\users\janipar\documents\github\uudistus\uudistus\server\server.cpp(111): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
-c:\users\janipar\documents\github\uudistus\uudistus\server\server.cpp(137): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-c:\users\janipar\documents\github\uudistus\uudistus\server\server.cpp(190): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'enet_uint32'
-  Server.vcxproj -> C:\Users\JaniPar\Documents\GitHub\Uudistus\Uudistus\Debug\Server.exe
-  Server.vcxproj -> C:\Users\JaniPar\Documents\GitHub\Uudistus\Uudistus\Debug\Server.pdb (Partial PDB)
+﻿  Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Server.exe
+  Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Server.pdb (Partial PDB)

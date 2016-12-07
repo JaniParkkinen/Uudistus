@@ -1,6 +1,9 @@
 #include "World.h"
 
 World::World()
+    :m_ships(),
+    m_stars(),
+    m_objects()
 {
     printf_s("World construction\n");
 }
@@ -35,7 +38,7 @@ void World::update(const float dt)
 
     //ship-ship collisions
     //TODO: move to ship
-    for (unsigned i = 0; i < m_ships.size() - 1; i++)
+    for (int i = 0; i < static_cast<int>(m_ships.size()) - 1; i++)
     {
         for (unsigned j = i+1; j < m_ships.size(); j++)
         {
@@ -43,15 +46,22 @@ void World::update(const float dt)
             GameObject* ship2 = m_ships[j]->getGameObject();
             if (ship1->getOwner() != ship2->getOwner())
             {
-                if (ship1->getEnergy() < ship2->getEnergy())
+                float dx = ship1->getX() - ship2->getX();
+                float dy = ship1->getY() - ship2->getY();
+                float distance2 = dx*dx + dy*dy;
+
+                if (distance2 < 32 * 32)
                 {
-                    ship2->setEnergy(ship2->getEnergy() - ship1->getEnergy());
-                    ship1->destroy();
-                }
-                else
-                {
-                    ship1->setEnergy(ship1->getEnergy() - ship2->getEnergy());
-                    ship2->destroy();
+                    if (ship1->getEnergy() < ship2->getEnergy())
+                    {
+                        ship2->setEnergy(ship2->getEnergy() - ship1->getEnergy());
+                        ship1->destroy();
+                    }
+                    else
+                    {
+                        ship1->setEnergy(ship1->getEnergy() - ship2->getEnergy());
+                        ship2->destroy();
+                    }
                 }
             }
         }
@@ -164,8 +174,8 @@ void World::sendShip(const int sender, const int target)
     GameObject* go;
     
     go = star1->getGameObject();
-    go->setEnergy(0.f);
     createShip(go->getX(), go->getY(), go->getOwner(), go->getEnergy(), star2->getGameObject(), 10);
+    go->setEnergy(0.f);
 
 }
 

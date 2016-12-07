@@ -34,7 +34,6 @@ public:
 private:
     float m_energyTimer;
     float m_shipTimer;
-    float m_energy;
     std::vector<Connection*> m_connections;
 };
 

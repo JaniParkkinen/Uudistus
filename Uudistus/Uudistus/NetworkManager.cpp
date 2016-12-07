@@ -15,118 +15,121 @@ NetworkManager::NetworkManager()
 	initNetwork("127.0.0.1");
 }
 
-//NetworkManager::~NetworkManager()
-//{
-//    //TODO
-//}
+NetworkManager::~NetworkManager()
+{
+    printf_s("Deconstructing network...\n");
+    //TODO
+}
 
 void NetworkManager::clientLoop() {
     printf("Client thread started\n");
 
     // processing incoming events:
     while(true)
-    while (enet_host_service(host, &event, 50) > 0) {
-        switch (event.type) {
-        case ENET_EVENT_TYPE_CONNECT: {
-            printf("  A new connected has been established to %u:%u\n",
-                event.peer->address.host, event.peer->address.port);
-            fflush(stdout);
+    {
+        while (enet_host_service(host, &event, 50) > 0) {
+            switch (event.type) {
+            case ENET_EVENT_TYPE_CONNECT: {
+                printf("  A new connected has been established to %u:%u\n",
+                    event.peer->address.host, event.peer->address.port);
+                fflush(stdout);
 
-            char buf[64];
-            sprintf_s(buf, "%u:%u\n", event.peer->address.host, event.peer->address.port);
-            int buflen = strlen(buf);
-            event.peer->data = malloc(buflen + 1);
-            //strncpy_s((char*)event.peer->data, sizeof(event.peer->data), buf);
-            memcpy_s(event.peer->data, buflen + 1, buf, buflen + 1);
-            peer = event.peer;
+                char buf[64];
+                sprintf_s(buf, "%u:%u\n", event.peer->address.host, event.peer->address.port);
+                int buflen = strlen(buf);
+                event.peer->data = malloc(buflen + 1);
+                //strncpy_s((char*)event.peer->data, sizeof(event.peer->data), buf);
+                memcpy_s(event.peer->data, buflen + 1, buf, buflen + 1);
+                peer = event.peer;
 
-            break;
-        }
-        case ENET_EVENT_TYPE_RECEIVE:
-        {
-            int* messageType = (int*)event.packet->data;
-
-
-            printf_s("recieved: \n");
-            for (int i = 0; i < event.packet->dataLength; i++)
-            {
-                printf_s("%02x ", event.packet->data[i]);
-            }
-            printf_s("\n");
-
-            switch (*messageType)
-            {
-            case 0:
-                printf_s("Game starts!");
-                break;
-            case 10:
-            {
-                unsigned buf[2] = { 10, m_tick };
-
-                ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
-                enet_peer_send(peer, 0, packet2);
-                m_tick++;
-                m_world->update(0.1f);
                 break;
             }
-            case 11:
+            case ENET_EVENT_TYPE_RECEIVE:
             {
-                int* message = (int*)event.packet->data;
+                int* messageType = (int*)event.packet->data;
 
-                printf_s("Creating a star...\n");
 
-                for (int i = 0; i < 6; i++)
+                //printf_s("recieved: \n");
+                //for (int i = 0; i < event.packet->dataLength; i++)
+                //{
+                //    printf_s("%02x ", event.packet->data[i]);
+                //}
+                //printf_s("\n");
+
+                switch (*messageType)
                 {
-                    printf_s("%u ", *(message + i));
-                }
-
-                m_world->createStar(*(message + 2), *(message + 3), *(message + 4), *(message + 5));
-                break;
-            }
-            case 12:
-            {
-                int* message = (int*)event.packet->data;
-
-                printf_s("Sending a ship...\n");
-
-                for (int i = 0; i < 3; i++)
+                case 0:
+                    printf_s("Game starts!");
+                    break;
+                case 10:
                 {
-                    printf_s("%u ", *(message + i));
+                    unsigned buf[2] = { 10, m_tick };
+
+                    ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+                    enet_peer_send(peer, 0, packet2);
+                    m_tick++;
+                    m_world->update(0.1f);
+                    break;
                 }
-
-                m_world->sendShip(*(message + 2), *(message + 3));
-                break;
-            }
-            case 13:
-            {
-                int* message = (int*)event.packet->data;
-
-                printf_s("Connecting stars...\n");
-
-                for (int i = 0; i < 3; i++)
+                case 11:
                 {
-                    printf_s("%u ", *(message + i));
-                }
+                    int* message = (int*)event.packet->data;
 
-                m_world->connectStars(*(message + 2), *(message + 3));
+                    printf_s("Creating a star...\n");
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        printf_s("%u ", *(message + i));
+                    }
+
+                    m_world->createStar(*(message + 2), *(message + 3), *(message + 4), *(message + 5));
+                    break;
+                }
+                case 12:
+                {
+                    int* message = (int*)event.packet->data;
+
+                    printf_s("Sending a ship from %i to %i\n", *(message + 2), *(message + 3));
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        printf_s("%u ", *(message + i));
+                    }
+
+                    m_world->sendShip(*(message + 2), *(message + 3));
+                    break;
+                }
+                case 13:
+                {
+                    int* message = (int*)event.packet->data;
+
+                    printf_s("Connecting stars...\n");
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        printf_s("%u ", *(message + i));
+                    }
+
+                    m_world->connectStars(*(message + 2), *(message + 3));
+                    break;
+                }
+                default:
+                    break;
+                }
+                fflush(stdout);
+
+                enet_packet_destroy(event.packet); // clean up the packet now that we're done using it
                 break;
             }
+            case ENET_EVENT_TYPE_DISCONNECT:
+                printf("  host disconnected.\n");
+                fflush(stdout);
+                free(event.peer->data);
+                event.peer->data = 0; // reset the peer's client information.
+                peer = 0;
             default:
                 break;
             }
-            fflush(stdout);
-
-            enet_packet_destroy(event.packet); // clean up the packet now that we're done using it
-            break;
-        }
-        case ENET_EVENT_TYPE_DISCONNECT:
-            printf("  host disconnected.\n");
-            fflush(stdout);
-            free(event.peer->data);
-            event.peer->data = 0; // reset the peer's client information.
-            peer = 0;
-        default:
-            break;
         }
     }
 }

@@ -5,7 +5,7 @@ Star::Star(GameObject* parent, const float energy)
 {
     printf_s("Star constructor\n");
     m_gameObject = parent;
-    m_energy = energy;
+    parent->setEnergy(energy);
 }
 
 Star::~Star()
@@ -18,7 +18,7 @@ Star::~Star()
 
 void Star::update(const float dt)
 {
-    m_energy += dt;
+    getGameObject()->setEnergy(getGameObject()->getEnergy() + dt);
 }
 
 const std::vector<Connection*>& Star::getConnections()

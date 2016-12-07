@@ -4,6 +4,7 @@
 #include "Ship.h"
 #include <GameObject.h>
 #include "GuiArea.h"
+#include "GUIText.h"
 
 #define PI 3.14159265
 
@@ -50,12 +51,7 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     m_gui.setBorder(32, 32);
     m_gui.setElementMargin(8, 8);
 
-    for (int i = 0; i < 10; i++)
-    {
-        m_gui.createButton("Test" + std::to_string(i), std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
-    }
-
-    m_gui.removeButton("Test3");
+    m_gui.createText("Energy", "---", &m_font);
 }
 
 GameScene::~GameScene()
@@ -74,7 +70,10 @@ void GameScene::temp()
 
 void GameScene::update(float dt)
 {
-    m_gui.getElementByName<Button>("Test1")->setColor(sf::Color(255, (sin(m_total_time) / 2.f + 0.5f)*255.f, 0));
+    if (m_selected.size() > 0)
+    {
+        m_gui.getElementByName<GUIText>("Energy")->setText("E:" + std::to_string(m_selected[0]->getEnergy()));
+    }
 
     if (m_input->mousePressed(MouseButton::Left))
     {

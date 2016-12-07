@@ -16,6 +16,7 @@ public:
 			nm;
 	}
 
+
 	void setWorld(World* world);
 	void initNetwork(std::string ip);
     void createStar(int x, int y, int energy, int owner, int level);
@@ -24,6 +25,7 @@ public:
 	void setReady(bool isReady);
 private:
 	NetworkManager(); //connect
+    ~NetworkManager();
 	static NetworkManager* nm;
 
     //char* createStation(int x, int y, int energy, int owner, int type);;

@@ -48,7 +48,7 @@ void Server::serverLoop() {
 			{
 				//TODO: ready check
 				printf_s("Ready\n");
-				unsigned buf[2] = { 10, m_tick };
+				unsigned buf[2] = { 10, 0 };
 
 				ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
 				broadcast(packet2);
