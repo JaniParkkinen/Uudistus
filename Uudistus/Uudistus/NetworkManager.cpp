@@ -131,9 +131,9 @@ void NetworkManager::clientLoop() {
     }
 }
 
-void NetworkManager::setWorld()
+void NetworkManager::setWorld(World* world)
 {
-
+    m_world = world;
 }
 
 void NetworkManager::initNetwork(std::string ip) {

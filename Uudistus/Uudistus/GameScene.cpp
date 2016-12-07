@@ -10,11 +10,11 @@
 GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     :Scene(window, sm),
     m_mode(EModeDefault),
-
-    m_net(&m_world, "127.0.0.1"),
     m_gui(600, 0, 200, 800, 16, 2)
 
 {
+    NetworkManager::instance()->setWorld(&m_world);
+
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
     guiTex.loadFromFile("assets/gui.png");
@@ -68,7 +68,7 @@ void GameScene::temp()
     printf_s("Temp called!\n");
     for (int i = 0; i < 100; i++)
     {
-        m_net.sendShip(0, 1);
+        NetworkManager::instance()->sendShip(0, 1);
     }
 }
 
@@ -175,29 +175,11 @@ void GameScene::update(float dt)
             m_mode = EModeDefault;
         }
     }
-    
-    
-
-    //m_world.update(dt);
     //TODO: remove deleted objects from m_selected
-
-
 }
 
 void GameScene::draw(sf::RenderTarget* rt)
 {
-    ////draw grid
-    //sf::RectangleShape square(sf::Vector2f(32, 32));
-    //for (int i = 0; i < 32; i++)
-    //{
-    //    for (int j = 0; j < 32; j++)
-    //    {
-    //        square.setFillColor(((i+j)%2==0) ? sf::Color::Black : sf::Color::Green);
-    //        square.setPosition(i * 32, j * 32);
-    //        rt->draw(square);;
-    //    }
-    //}
-
     //draw stars and connections
     const std::vector<Star*> stars = m_world.getStars();
     m_world.m_starLock.lock();
@@ -206,6 +188,7 @@ void GameScene::draw(sf::RenderTarget* rt)
         Star* star = stars[i];
         //draw star
         m_starSprite.setPosition(star->getGameObject()->getX(), star->getGameObject()->getY());
+        m_starSprite.setColor(m_playerColor[stars[i]->getGameObject()->getOwner()]);
         rt->draw(m_starSprite);
 
         const std::vector<Connection*> connections = star->getConnections();
@@ -221,16 +204,14 @@ void GameScene::draw(sf::RenderTarget* rt)
                     sf::Vertex(sf::Vector2f(starObject->getX(), starObject->getY())),
                     sf::Vertex(sf::Vector2f(targetObject->getX(), targetObject->getY()))
                 };
-                line[0].color = sf::Color::Cyan;
-                line[1].color = sf::Color::Cyan;
+                line[0].color = m_playerColor[starObject->getOwner()];
+                line[1].color = m_playerColor[targetObject->getOwner()];
                 rt->draw(line, 5, sf::Lines);
             }
         }
     }
     m_world.m_starLock.unlock();
 
-    //draw ships
-    //for (Ship* ship : m_world.getShips())
     m_world.m_shipLock.lock();
     const std::vector<Ship*> ships = m_world.getShips();
     for(unsigned i = 0; i < ships.size(); i++)
@@ -239,6 +220,7 @@ void GameScene::draw(sf::RenderTarget* rt)
         m_shipSprite.setRotation(ship->getDirection() * 180.f / 3.14159265f);
 
         m_shipSprite.setPosition(ship->getGameObject()->getX(), ship->getGameObject()->getY());
+        m_shipSprite.setColor(m_playerColor[ship->getGameObject()->getOwner()]);
         rt->draw(m_shipSprite);
     }
     m_world.m_shipLock.unlock();

@@ -27,11 +27,34 @@ const std::vector<Ship*>& World::getShips()
 
 void World::update(const float dt)
 {
-    //const std::vector<GameObject*>& objects = getObjects();
     for (unsigned i = 0; i < m_objects.size(); i++)
     {
         if (m_objects[i] != nullptr)
             m_objects[i]->update(dt);
+    }
+
+    //ship-ship collisions
+    //TODO: move to ship
+    for (unsigned i = 0; i < m_ships.size() - 1; i++)
+    {
+        for (unsigned j = i+1; j < m_ships.size(); j++)
+        {
+            GameObject* ship1 = m_ships[i]->getGameObject();
+            GameObject* ship2 = m_ships[j]->getGameObject();
+            if (ship1->getOwner() != ship2->getOwner())
+            {
+                if (ship1->getEnergy() < ship2->getEnergy())
+                {
+                    ship2->setEnergy(ship2->getEnergy() - ship1->getEnergy());
+                    ship1->destroy();
+                }
+                else
+                {
+                    ship1->setEnergy(ship1->getEnergy() - ship2->getEnergy());
+                    ship2->destroy();
+                }
+            }
+        }
     }
 
     //destroy all destroyed game objects
@@ -141,6 +164,7 @@ void World::sendShip(const int sender, const int target)
     GameObject* go;
     
     go = star1->getGameObject();
+    go->setEnergy(0.f);
     createShip(go->getX(), go->getY(), go->getOwner(), go->getEnergy(), star2->getGameObject(), 10);
 
 }

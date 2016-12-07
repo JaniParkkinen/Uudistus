@@ -47,7 +47,6 @@ private:
 
     GUIArea m_gui;
     World m_world;
-    NetworkManager m_net;
 
     EMode m_mode;
     std::vector<GameObject*> m_selected;
@@ -65,7 +64,7 @@ private:
         sf::Color(255, 0, 255),
         sf::Color(255, 255, 0),
         sf::Color(255, 127, 0),
-        sf::Color(127, 127, 0),
+        sf::Color(127, 127, 0), //player7
         sf::Color(255, 255, 255), //unoccupied
         sf::Color(32, 32, 32), //unknown
     };
