@@ -1,42 +1,4 @@
 ﻿  GameScene.cpp
-  Button.cpp
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\button.cpp(16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-  Compiling...
-  main.cpp
-  LobbyScene.cpp
-  GuiArea.cpp
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(12): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(18): error C2440: 'initializing': cannot convert from 'std::pair<const _Kty,_Ty>' to 'std::pair<std::string,Button *>'
-          with
-          [
-              _Kty=std::string,
-              _Ty=GUIElement *
-          ]
-  c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(18): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(29): error C2440: 'initializing': cannot convert from 'std::pair<const _Kty,_Ty>' to 'std::pair<std::string,Button *>'
-          with
-          [
-              _Kty=std::string,
-              _Ty=GUIElement *
-          ]
-  c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(29): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(40): error C2440: 'initializing': cannot convert from 'std::pair<const _Kty,_Ty>' to 'std::pair<std::string,Button *>'
-          with
-          [
-              _Kty=std::string,
-              _Ty=GUIElement *
-          ]
-  c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(40): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(50): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(89): error C2440: 'initializing': cannot convert from 'std::pair<const _Kty,_Ty>' to 'std::pair<std::string,Button *>'
-          with
-          [
-              _Kty=std::string,
-              _Ty=GUIElement *
-          ]
-  c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(89): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(97): error C2039: 'setActive': is not a member of 'GUIElement'
-  c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guielement.h(7): note: see declaration of 'GUIElement'
-c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\guiarea.cpp(111): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
+c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\gamescene.cpp(80): warning C4244: 'argument': conversion from 'float' to 'sf::Uint8', possible loss of data
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.exe
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.pdb (Partial PDB)

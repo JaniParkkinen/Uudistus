@@ -13,11 +13,13 @@ public:
     Button(int x, int y, int w, int h, t_function callback, sf::Texture* up, sf::Texture* down = nullptr, sf::Texture* hover = nullptr);
     ~Button();
 
+    void setColor(sf::Color color)override;
     void setActive(bool active);
     bool isActive();
 
     void draw(sf::RenderTarget* rt);
     void update();
+
 private:
     //int x, y, w, h;
     bool m_isActive;

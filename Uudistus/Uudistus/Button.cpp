@@ -2,11 +2,8 @@
 #include "InputManager.h"
 
 Button::Button(int x, int y, int w, int h, t_function callback, sf::Texture* up, sf::Texture* down, sf::Texture* hover)
+    :GUIElement(x, y, w, h)
 {
-    m_x = x;
-    m_y = y;
-    m_w = w;
-    m_h = h;
 
     m_isActive = true;
     m_callback = callback;
@@ -31,6 +28,12 @@ Button::Button(int x, int y, int w, int h, t_function callback, sf::Texture* up,
 
 Button::~Button()
 {
+}
+
+void Button::setColor(sf::Color color)
+{
+    m_color = color;
+    m_bgSprite.setColor(m_color);
 }
 
 void Button::setActive(bool active)

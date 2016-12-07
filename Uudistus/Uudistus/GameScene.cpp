@@ -21,6 +21,8 @@ GameScene::GameScene(sf::RenderWindow* window)
     buttonDown.loadFromFile("assets/button_down.png");
     buttonHover.loadFromFile("assets/button_hover.png");
 
+    m_font.loadFromFile("assets/COLONNA.TTF");
+
     m_starSprite = sf::Sprite(tex);
     m_shipSprite = sf::Sprite(shipTexture);
 
@@ -69,6 +71,8 @@ void GameScene::temp()
 
 void GameScene::update(float dt)
 {
+    m_gui.getElementByName<Button>("Test1")->setColor(sf::Color(255, (sin(m_total_time) / 2.f + 0.5f)*255.f, 0));
+
     if (m_input->mousePressed(MouseButton::Left))
     {
         sf::Vector2f mPos = m_input->getMousePos();
