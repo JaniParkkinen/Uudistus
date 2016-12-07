@@ -16,11 +16,12 @@ public:
 			nm;
 	}
 
-	void setWorld();
+	void setWorld(World* world);
 	void initNetwork(std::string ip);
     void createStar(int x, int y, int energy, int owner, int level);
     void sendShip(int id1, int id2);
     void connect(int id1, int id2);
+	void setReady(bool isReady);
 private:
 	NetworkManager(); //connect
 	static NetworkManager* nm;

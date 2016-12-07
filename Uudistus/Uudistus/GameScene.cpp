@@ -10,11 +10,11 @@
 GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     :Scene(window, sm),
     m_mode(EModeDefault),
-
-    m_net(&m_world, "127.0.0.1"),
     m_gui(600, 0, 200, 800, 16, 2)
 
 {
+	NetworkManager::instance()->setWorld(&m_world);
+
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
     guiTex.loadFromFile("assets/gui.png");
@@ -68,7 +68,7 @@ void GameScene::temp()
     printf_s("Temp called!\n");
     for (int i = 0; i < 100; i++)
     {
-        m_net.sendShip(0, 1);
+        NetworkManager::instance()->sendShip(0, 1);
     }
 }
 

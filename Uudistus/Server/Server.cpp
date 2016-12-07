@@ -37,11 +37,6 @@ void Server::serverLoop() {
             peer = event.peer;
             m_nPlayers++;
 
-            unsigned buf[2] = { 10, m_tick };
-
-            ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
-            broadcast(packet2);
-
             break;
         }
         case ENET_EVENT_TYPE_RECEIVE:
@@ -49,7 +44,16 @@ void Server::serverLoop() {
             printf_s("event recieved.\n");
             fflush(stdout);
             int* intData = (int*)event.packet->data;
-            if (intData[0] > 10) //command
+			if (intData[0] == 0)
+			{
+				//TODO: ready check
+				printf_s("Ready\n");
+				unsigned buf[2] = { 10, m_tick };
+
+				ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+				broadcast(packet2);
+			}
+            else if (intData[0] > 10) //command
             {
                 printf_s("test command\n");
                 m_packets.push_back(std::make_pair(event.packet, intData[1]));

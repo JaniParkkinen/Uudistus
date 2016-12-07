@@ -6,6 +6,7 @@ LobbyScene::LobbyScene(sf::RenderWindow* rw, SceneManager* sm) :
     Scene(rw, sm),
     m_gui(200, 50, 400, 400, 4, 1)
 {
+	NetworkManager::instance();
 	readyDown.loadFromFile("assets/ready_down.png");
 	readyUp.loadFromFile("assets/ready_up.png");
 	readyHover.loadFromFile("assets/ready_hover.png");
@@ -63,8 +64,8 @@ void LobbyScene::readyCheck()
 
 void LobbyScene::ready()
 {
-	//if(isReady == true)
-		m_sm->changeScene(new GameScene(m_rw, m_sm));
+	m_sm->changeScene(new GameScene(m_rw, m_sm));
+	NetworkManager::instance()->setReady(true);
 }
 
 void LobbyScene::disconnect()

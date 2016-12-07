@@ -131,9 +131,9 @@ void NetworkManager::clientLoop() {
     }
 }
 
-void NetworkManager::setWorld()
+void NetworkManager::setWorld(World* world)
 {
-
+	m_world = world;
 }
 
 void NetworkManager::initNetwork(std::string ip) {
@@ -237,4 +237,24 @@ void NetworkManager::connect(int id1, int id2)
         enet_packet_resize(packet, size);
         enet_peer_send(peer, 0, packet);
     }
+}
+
+void NetworkManager::setReady(bool isReady)
+{
+	const int size = 3 * sizeof(int);
+	unsigned buf2[3] = { 0, m_tick, isReady };
+	
+	printf_s("sending:\n");
+	for (int i = 0; i < 2; i++)
+	{
+		printf_s("%08x ", buf2[i]);
+	}
+	printf_s("\n");
+
+	if (peer->data != 0)
+	{
+		ENetPacket * packet = enet_packet_create(buf2, size, ENET_PACKET_FLAG_RELIABLE);
+		enet_packet_resize(packet, size);
+		enet_peer_send(peer, 0, packet);
+	}
 }

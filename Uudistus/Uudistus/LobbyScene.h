@@ -16,6 +16,7 @@ public:
 	void readyCheck();
     void ready();
 	void disconnect();
+	
 
 private:
     GUIArea m_gui;

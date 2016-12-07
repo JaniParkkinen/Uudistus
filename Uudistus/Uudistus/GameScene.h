@@ -47,7 +47,6 @@ private:
 
     GUIArea m_gui;
     World m_world;
-    NetworkManager m_net;
 
     EMode m_mode;
     std::vector<GameObject*> m_selected;
