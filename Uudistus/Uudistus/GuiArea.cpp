@@ -1,4 +1,5 @@
 #include "GuiArea.h"
+#include "GUIText.h"
 
 GUIArea::GUIArea(int x, int y, int w, int h, int rows, int columns)
     :m_x(x),
@@ -15,7 +16,7 @@ GUIArea::GUIArea(int x, int y, int w, int h, int rows, int columns)
 
 GUIArea::~GUIArea()
 {
-    for (std::pair<std::string, Button*> b : m_buttons)
+    for (std::pair<std::string, GUIElement*> b : m_buttons)
     {
         delete b.second;
     }
@@ -26,7 +27,7 @@ void GUIArea::draw(sf::RenderTarget* rt)
     if (m_isVisible)
     {
         rt->draw(m_background);
-        for (std::pair<std::string, Button*> b : m_buttons)
+        for (std::pair<std::string, GUIElement*> b : m_buttons)
         {
             b.second->draw(rt);
         }
@@ -37,7 +38,7 @@ void GUIArea::update()
 {
     if (m_isVisible)
     {
-        for (std::pair<std::string, Button*> b : m_buttons)
+        for (std::pair<std::string, GUIElement*> b : m_buttons)
         {
             b.second->update();
         }
@@ -55,20 +56,33 @@ void GUIArea::setBackground(sf::Texture* texture, float alpha)
 
 void GUIArea::createButton(std::string name, t_function callback, sf::Texture* up, sf::Texture* down, sf::Texture* hover)
 {
-    int size = m_buttons.size();
-    int x = m_x;
-    int y = m_y + (m_h / m_rows) * size;
+    int elementW = (m_w - m_xBorder * 2 - (m_xElementMargin * (m_columns - 1))) / m_columns;
+    int elementH = (m_h - m_yBorder * 2 - (m_yElementMargin * (m_rows - 1))) / m_rows;
 
-    Button* button = new Button(x, y, m_w / m_columns, m_h / m_rows, callback, up, down, hover);
-    //std::pair<std::string, Button*> buttonPair(name, button);
-    //m_buttons.insert(buttonPair);
+    int size = m_buttons.size();
+    int x = m_x + m_xBorder + (elementW + m_xElementMargin) * (size % m_columns);
+    int y = m_y + m_yBorder + (elementH + m_yElementMargin) * (size / m_columns);
+
+    Button* button = new Button(x, y, elementW, elementH, callback, up, down, hover);
 
     button->setActive(true);
 
     m_buttons[name] = button;
-
-    //m_buttons.emplace(name, button);
 }
+
+void GUIArea::createText(std::string name, std::string text, sf::Font* font)
+{
+    int elementW = (m_w - m_xBorder * 2 - (m_xElementMargin * (m_columns - 1))) / m_columns;
+    int elementH = (m_h - m_yBorder * 2 - (m_yElementMargin * (m_rows - 1))) / m_rows;
+
+    int size = m_buttons.size();
+    int x = m_x + m_xBorder + (elementW + m_xElementMargin) * (size % m_columns);
+    int y = m_y + m_yBorder + (elementH + m_yElementMargin) * (size / m_columns);
+
+    GUIText* guiText = new GUIText(x, y, elementW, elementH, text, font);
+    m_buttons[name] = guiText;
+}
+
 
 void GUIArea::clearButtons()
 {
@@ -81,17 +95,21 @@ void GUIArea::removeButton(std::string name)
     m_buttons.erase(name);
 }
 
-void GUIArea::setActive(bool active)
+void GUIArea::setButtonActive(bool active)
 {
-    for (std::pair<std::string, Button*> b : m_buttons)
+    for (std::pair<std::string, GUIElement*> b : m_buttons)
     {
-        b.second->setActive(active);
+        Button* button = dynamic_cast<Button*>(b.second);
+        if(button)
+            button->setActive(active);
     }
 }
 
-void GUIArea::setActive(std::string name, bool active)
+void GUIArea::setButtonActive(std::string name, bool active)
 {
-    m_buttons[name]->setActive(active);
+    Button* b = dynamic_cast<Button*>(m_buttons[name]);
+    if (b)
+        b->setActive(active);
 }
 
 void GUIArea::setVisible(bool visible)
@@ -106,7 +124,20 @@ void GUIArea::setArea(int x, int y, int w, int h)
     m_w = w;
     m_h = h;
     m_background.setPosition(x, y);
+
     float xScale = (float)m_w / m_background.getTexture()->getSize().x;
     float yScale = (float)m_h / m_background.getTexture()->getSize().y;
     m_background.setScale(xScale, yScale);
+}
+
+void GUIArea::setBorder(int x, int y)
+{
+    m_xBorder = x;
+    m_yBorder = y;
+}
+
+void GUIArea::setElementMargin(int x, int y)
+{
+    m_xElementMargin = x;
+    m_yElementMargin = y;
 }

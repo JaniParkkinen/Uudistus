@@ -6,7 +6,6 @@ LobbyScene::LobbyScene(sf::RenderWindow* rw, SceneManager* sm) :
     Scene(rw, sm),
     m_gui(200, 50, 400, 400, 4, 1)
 {
-
 	readyDown.loadFromFile("assets/ready_down.png");
 	readyUp.loadFromFile("assets/ready_up.png");
 	readyHover.loadFromFile("assets/ready_hover.png");
@@ -22,7 +21,6 @@ LobbyScene::LobbyScene(sf::RenderWindow* rw, SceneManager* sm) :
 	
 	m_gui.createButton("ready", std::bind(&LobbyScene::ready, this), &readyUp, &readyDown, &readyHover);
 	m_gui.createButton("disconnect", std::bind(&LobbyScene::disconnect, this), &discUp, &discDown, &discHover);
-
 }
 
 LobbyScene::~LobbyScene()

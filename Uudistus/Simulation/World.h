@@ -6,6 +6,7 @@
 #include "Ship.h"
 
 #include <vector>
+#include <mutex>
 
 class World
 {
@@ -22,6 +23,12 @@ public:
     const std::vector<Star*>& getStars();
     const std::vector<Ship*>& getShips();
 
+    std::mutex m_starLock;
+    std::mutex m_shipLock;
+    //stationLock...
+    //otherLock?
+
+    //use events instead of callbaks?
 private:
     int m_ID;
 
@@ -30,6 +37,7 @@ private:
     std::vector<GameObject*> m_objects;
     std::vector<Star*> m_stars;
     std::vector<Ship*> m_ships;
+
 };
 
 #endif

@@ -41,23 +41,36 @@ private:
     sf::Sprite m_starSprite;
     sf::Sprite m_shipSprite;
 
+    sf::Font m_font;
+
     t_function* m_callbackLambda;
 
     GUIArea m_gui;
-
     World m_world;
-
-    //sf::Sprite* m_GUIBackground;
-    //std::vector<Button*> m_menu;
-
-    std::vector<GameObject*> m_selected;
-
-    
-    float m_total_time;
-
-    int m_ID = 0;
+    NetworkManager m_net;
 
     EMode m_mode;
+    std::vector<GameObject*> m_selected;
+
+    float m_total_time;
+    int m_ID = 0;
+
+    //TODO: make this global?
+    const sf::Color m_playerColor[10]
+    {
+        sf::Color(0, 255, 0), //player0
+        sf::Color(0, 0, 255),
+        sf::Color(255, 0, 0),
+        sf::Color(0, 255, 255),
+        sf::Color(255, 0, 255),
+        sf::Color(255, 255, 0),
+        sf::Color(255, 127, 0),
+        sf::Color(127, 127, 0),
+        sf::Color(255, 255, 255), //unoccupied
+        sf::Color(32, 32, 32), //unknown
+    };
+
+    bool m_temp;
 };
 
 #endif

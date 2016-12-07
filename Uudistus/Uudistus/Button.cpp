@@ -2,13 +2,8 @@
 #include "InputManager.h"
 
 Button::Button(int x, int y, int w, int h, t_function callback, sf::Texture* up, sf::Texture* down, sf::Texture* hover)
+    :GUIElement(x, y, w, h)
 {
-    this->x = x;
-    this->y = y;
-    this->w = w;
-    this->h = h;
-
-    callback();
 
     m_isActive = true;
     m_callback = callback;
@@ -35,6 +30,12 @@ Button::~Button()
 {
 }
 
+void Button::setColor(sf::Color color)
+{
+    m_color = color;
+    m_bgSprite.setColor(m_color);
+}
+
 void Button::setActive(bool active)
 {
     m_isActive = active;
@@ -47,7 +48,7 @@ void Button::draw(sf::RenderTarget* rt)
     if (m_isActive)
     {
         sf::Vector2f mPos = InputManager::instance()->getMousePos();
-        if (mPos.x > x && mPos.x < x + w && mPos.y > y && mPos.y < y + h)
+        if (mPos.x > m_x && mPos.x < m_x + m_w && mPos.y > m_y && mPos.y < m_y + m_h)
         {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
             {
@@ -77,7 +78,7 @@ void Button::update()
     if (m_isActive)
     {
         sf::Vector2f mPos = InputManager::instance()->getMousePos();
-        if (mPos.x > x && mPos.x < x + w && mPos.y > y && mPos.y < y + h)
+        if (mPos.x > m_x && mPos.x < m_x + m_w && mPos.y > m_y && mPos.y < m_y + m_h)
         {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
             {

@@ -10,7 +10,10 @@
 GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     :Scene(window, sm),
     m_mode(EModeDefault),
-    m_gui(600, 0, 200, 800, 16)
+
+    m_net(&m_world, "127.0.0.1"),
+    m_gui(600, 0, 200, 800, 16, 2)
+
 {
     tex.loadFromFile("assets/star.png");
     shipTexture.loadFromFile("assets/ship.png");
@@ -19,6 +22,8 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     buttonUp.loadFromFile("assets/button_up.png");
     buttonDown.loadFromFile("assets/button_down.png");
     buttonHover.loadFromFile("assets/button_hover.png");
+
+    m_font.loadFromFile("assets/COLONNA.TTF");
 
     m_starSprite = sf::Sprite(tex);
     m_shipSprite = sf::Sprite(shipTexture);
@@ -40,19 +45,15 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     //get seed from server
 
     m_world.generateMap(seed);
-    //m_callbackLambda = new t_function(
-    //std::function<void(void)> f = std::bind(
-    //    ([=] {
-    //        printf_s("Test1\n");
-    //    }), this);
-
 
     m_gui.setBackground(&guiTex);
+    m_gui.setBorder(32, 32);
+    m_gui.setElementMargin(8, 8);
 
-    m_gui.createButton("Test1", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
-    m_gui.createButton("Test2", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
-    m_gui.createButton("Test3", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
-    m_gui.createButton("Test4", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+    for (int i = 0; i < 10; i++)
+    {
+        m_gui.createButton("Test" + std::to_string(i), std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+    }
 
     m_gui.removeButton("Test3");
 }
@@ -65,10 +66,16 @@ GameScene::~GameScene()
 void GameScene::temp()
 {
     printf_s("Temp called!\n");
+    for (int i = 0; i < 100; i++)
+    {
+        m_net.sendShip(0, 1);
+    }
 }
 
 void GameScene::update(float dt)
 {
+    m_gui.getElementByName<Button>("Test1")->setColor(sf::Color(255, (sin(m_total_time) / 2.f + 0.5f)*255.f, 0));
+
     if (m_input->mousePressed(MouseButton::Left))
     {
         sf::Vector2f mPos = m_input->getMousePos();
@@ -96,6 +103,8 @@ void GameScene::update(float dt)
         if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
         {
             m_selected.clear();
+            m_world.m_shipLock.lock();
+            m_world.m_starLock.lock();
             for (GameObject* go : objects)
             {
                 if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
@@ -104,9 +113,13 @@ void GameScene::update(float dt)
                     break;
                 }
             }
+            m_world.m_starLock.unlock();
+            m_world.m_shipLock.unlock();
         }
         if (m_input->mousePressed(MouseButton::Right))
         {
+            m_world.m_shipLock.lock();
+            m_world.m_starLock.lock();
             for (GameObject* go : objects)
             {
                 if (go->getType() == EStar)
@@ -124,6 +137,8 @@ void GameScene::update(float dt)
                     }
                 }
             }
+            m_world.m_starLock.unlock();
+            m_world.m_shipLock.unlock();
         }
     }
     //connect
@@ -131,6 +146,8 @@ void GameScene::update(float dt)
     {
         if (m_input->mousePressed(MouseButton::Left))
         {
+            m_world.m_shipLock.lock();
+            m_world.m_starLock.lock();
             for (GameObject* go : objects)
             {
                 if (go->getType() == EStar)
@@ -149,6 +166,8 @@ void GameScene::update(float dt)
                     }
                 }
             }
+            m_world.m_starLock.unlock();
+            m_world.m_shipLock.unlock();
         }
 
         if (m_input->mousePressed(MouseButton::Right))
@@ -181,6 +200,7 @@ void GameScene::draw(sf::RenderTarget* rt)
 
     //draw stars and connections
     const std::vector<Star*> stars = m_world.getStars();
+    m_world.m_starLock.lock();
     for (unsigned i = 0; i < stars.size(); i++)
     {
         Star* star = stars[i];
@@ -207,9 +227,11 @@ void GameScene::draw(sf::RenderTarget* rt)
             }
         }
     }
+    m_world.m_starLock.unlock();
 
     //draw ships
     //for (Ship* ship : m_world.getShips())
+    m_world.m_shipLock.lock();
     const std::vector<Ship*> ships = m_world.getShips();
     for(unsigned i = 0; i < ships.size(); i++)
     {
@@ -219,6 +241,7 @@ void GameScene::draw(sf::RenderTarget* rt)
         m_shipSprite.setPosition(ship->getGameObject()->getX(), ship->getGameObject()->getY());
         rt->draw(m_shipSprite);
     }
+    m_world.m_shipLock.unlock();
 
     //draw selection
     sf::CircleShape selection;
