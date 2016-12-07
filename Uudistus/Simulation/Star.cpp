@@ -18,7 +18,7 @@ Star::~Star()
 
 void Star::update(const float dt)
 {
-    m_energy += dt / 10.f;
+    m_energy += dt;
 }
 
 const std::vector<Connection*>& Star::getConnections()

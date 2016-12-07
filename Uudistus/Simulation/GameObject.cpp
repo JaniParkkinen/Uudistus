@@ -1,5 +1,4 @@
 #include "GameObject.h"
-//#include "Component.h"
 #include <math.h>
 #include <string>
 
@@ -63,22 +62,22 @@ const float GameObject::getY()const
     return m_y;
 }
 
-float GameObject::getSize()
+const float GameObject::getSize()const
 {
     return m_size;
 }
 
-float GameObject::getEnergy()
+const float GameObject::getEnergy()const
 {
     return m_energy;
 }
 
-int GameObject::getOwner()
+const int GameObject::getOwner()const
 {
     return m_owner;
 }
 
-ObjectType GameObject::getType()
+const ObjectType GameObject::getType()const
 {
     return m_type;
 }

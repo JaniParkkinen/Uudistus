@@ -27,10 +27,10 @@ public:
 
     const float getX()const;
     const float getY()const;
-    float getSize();
-    float getEnergy();
-    int getOwner();
-    ObjectType getType();
+    const float getSize()const;
+    const float getEnergy()const;
+    const int getOwner()const;
+    const ObjectType getType()const;
 
     float getDistanceToPoint(float x, float y);
     const int getID()const;
