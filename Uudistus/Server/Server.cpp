@@ -36,6 +36,12 @@ void Server::serverLoop() {
             ////strncpy((char*)event.peer->data, buf, buflen);
             peer = event.peer;
             m_nPlayers++;
+			
+			unsigned buf[3] = { 8, m_ready, m_nPlayers };
+
+			ENetPacket* packet3 = enet_packet_create(buf, 3 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+			broadcast(packet3);
+
 
             break;
         }
@@ -47,11 +53,25 @@ void Server::serverLoop() {
 			if (intData[0] == 0)
 			{
 				//TODO: ready check
-				printf_s("Ready\n");
-				unsigned buf[2] = { 10, 0 };
+				m_ready++;
+				unsigned buf[3] = { 8, m_ready, m_nPlayers };
 
-				ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
-				broadcast(packet2);
+				ENetPacket* packet3 = enet_packet_create(buf, 3 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+				broadcast(packet3);
+
+				printf_s("Ready\n");
+
+				Sleep(500);
+				if (m_ready == m_nPlayers)
+				{
+					unsigned buf2[2] = { 10, 0 };
+					ENetPacket* packet2 = enet_packet_create(buf2, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+					broadcast(packet2);
+				}
+				//unsigned buf[3] = { 10, m_ready, m_nPlayers};
+
+				//ENetPacket * packet2 = enet_packet_create(buf, 3 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
+				//broadcast(packet2);
 			}
             else if (intData[0] > 10) //command
             {
@@ -91,6 +111,7 @@ void Server::serverLoop() {
         }
     }
 }
+
 
 void Server::eventLoop()
 {

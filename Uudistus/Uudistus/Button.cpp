@@ -77,7 +77,7 @@ void Button::update()
 {
     if (m_isActive)
     {
-        sf::Vector2f mPos = InputManager::instance()->getMousePos();
+        sf::Vector2i mPos = InputManager::instance()->getMousePosWindow();
         if (mPos.x > m_x && mPos.x < m_x + m_w && mPos.y > m_y && mPos.y < m_y + m_h)
         {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))

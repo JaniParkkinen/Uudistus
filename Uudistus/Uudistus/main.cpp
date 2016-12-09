@@ -10,11 +10,12 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "Galactic Uudistus");
     window.setFramerateLimit(60);
 
-	SceneManager sm;
     sf::Clock clock;
 
+    SceneManager sm(&window);
+
     printf_s("Starting game loop\n");
-	sm.changeScene(new LobbyScene(&window, &sm));
+    sm.changeScene(0);
     while (window.isOpen())
     {
         sf::Event event;

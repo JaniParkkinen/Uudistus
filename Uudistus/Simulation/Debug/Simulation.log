@@ -1,2 +1,6 @@
-﻿  Star.cpp
+﻿  World.cpp
+c:\users\ollisal\documents\github\uudistus\uudistus\simulation\world.cpp(162): warning C4018: '<': signed/unsigned mismatch
+c:\users\ollisal\documents\github\uudistus\uudistus\simulation\world.cpp(195): warning C4018: '<': signed/unsigned mismatch
+  Ship.cpp
+  Generating Code...
   Simulation.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Simulation.lib

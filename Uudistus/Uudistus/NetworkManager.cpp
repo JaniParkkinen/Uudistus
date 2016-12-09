@@ -9,6 +9,7 @@ NetworkManager* NetworkManager::nm = nullptr;
 NetworkManager::NetworkManager()
 {
     m_world = nullptr;
+	m_sceneM = nullptr;
     m_tick = 0;
     printf("Constructing Network..\n");
     //m_clientThread = std::thread(&NetworkManager::clientLoop, this);
@@ -61,8 +62,27 @@ void NetworkManager::clientLoop() {
                 case 0:
                     printf_s("Game starts!");
                     break;
+				case 8:
+				{
+					int* message = (int*)event.packet->data;
+					if (*(message + 1) == *(message + 2))
+					{
+						m_sceneM->changeScene(1);
+					}
+					break;
+				}
                 case 10:
                 {
+					int counter = 0;
+					while (!m_world)
+					{
+						Sleep(10);
+						if (counter > 1000)
+						{
+							printf_s("World does not exist\n");
+							return;
+						}
+					}
                     unsigned buf[2] = { 10, m_tick };
 
                     ENetPacket * packet2 = enet_packet_create(buf, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
@@ -137,6 +157,11 @@ void NetworkManager::clientLoop() {
 void NetworkManager::setWorld(World* world)
 {
 	m_world = world;
+}
+
+void NetworkManager::setSceneManager(SceneManager* sm)
+{
+	m_sceneM = sm;
 }
 
 void NetworkManager::initNetwork(std::string ip) {

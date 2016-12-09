@@ -1,12 +1,12 @@
 #include "LobbyScene.h"
 #include "SceneManager.h"
-#include "GameScene.h"
+#include "NetworkManager.h"
 
 LobbyScene::LobbyScene(sf::RenderWindow* rw, SceneManager* sm) :
     Scene(rw, sm),
     m_gui(200, 50, 400, 400, 4, 1)
 {
-	NetworkManager::instance();
+	NetworkManager::instance()->setSceneManager(sm);
 	readyDown.loadFromFile("assets/ready_down.png");
 	readyUp.loadFromFile("assets/ready_up.png");
 	readyHover.loadFromFile("assets/ready_hover.png");
@@ -40,9 +40,9 @@ void LobbyScene::update(const float dt)
 	if (m_rw != nullptr)
 		m_input->update(dt, m_rw);
 
-	m_gui.update();
 
 	m_total_time = +dt;
+	m_gui.update();
 }
 
 void LobbyScene::draw(sf::RenderTarget* rt)
@@ -54,7 +54,7 @@ void LobbyScene::draw(sf::RenderTarget* rt)
 
 void LobbyScene::playerList()
 {
-
+	
 }
 
 void LobbyScene::readyCheck()
@@ -64,8 +64,9 @@ void LobbyScene::readyCheck()
 
 void LobbyScene::ready()
 {
-	m_sm->changeScene(new GameScene(m_rw, m_sm));
-	NetworkManager::instance()->setReady(true);
+		
+		//m_sm->changeScene(1);
+		NetworkManager::instance()->setReady(true);
 }
 
 void LobbyScene::disconnect()

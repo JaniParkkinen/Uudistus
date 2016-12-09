@@ -1,2 +1,4 @@
-﻿  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.exe
+﻿  Button.cpp
+c:\users\ollisal\documents\github\uudistus\uudistus\uudistus\button.cpp(13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.exe
   Uudistus.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Debug\Client.pdb (Partial PDB)
