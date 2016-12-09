@@ -51,12 +51,18 @@ sf::Vector2f InputManager::getMousePos()
     return _mousePos;
 }
 
+sf::Vector2i InputManager::getMousePosWindow()
+{
+    return _mousePosWindow;
+}
+
 void InputManager::update(const float dt, const sf::RenderWindow* window)
 {
     //printf_s("input update\n");
     const float doubleClickMaxTime = 1.0f;
 
     _mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+    _mousePosWindow = sf::Mouse::getPosition(*window);
 
     if (_doubleClickTimer[0] > 0) { _doubleClickTimer[0] -= dt; }
     if (_doubleClickTimer[1] > 0) { _doubleClickTimer[1] -= dt; }

@@ -21,6 +21,7 @@ public:
     bool mouseDoubleClick(MouseButton button);
 
     sf::Vector2f getMousePos();
+    sf::Vector2i getMousePosWindow();
 
     void update(const float dt, const sf::RenderWindow* window);
 
@@ -35,4 +36,5 @@ private:
     bool _mouseDown[3];
     float _doubleClickTimer[3];
     sf::Vector2f _mousePos;
+    sf::Vector2i _mousePosWindow;
 };

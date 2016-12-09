@@ -23,6 +23,8 @@ public:
     void sendShip(int id1, int id2);
     void connect(int id1, int id2);
 	void setReady(bool isReady);
+
+    const int getTick()const;
 private:
 	NetworkManager(); //connect
     ~NetworkManager();

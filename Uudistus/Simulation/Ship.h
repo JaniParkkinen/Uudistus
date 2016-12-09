@@ -11,6 +11,7 @@ public:
     void update(const float dt)override;
 
     float getDirection();
+    float getSpeed();
 
 private:
     GameObject* m_target;

@@ -24,6 +24,7 @@ GUIArea::~GUIArea()
 
 void GUIArea::draw(sf::RenderTarget* rt)
 {
+    rt->setView(rt->getDefaultView());
     if (m_isVisible)
     {
         rt->draw(m_background);

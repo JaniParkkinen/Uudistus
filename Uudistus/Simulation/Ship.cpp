@@ -62,3 +62,8 @@ float Ship::getDirection()
 {
     return m_direction;
 }
+
+float Ship::getSpeed()
+{
+    return m_speed;
+}

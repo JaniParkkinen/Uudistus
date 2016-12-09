@@ -261,3 +261,8 @@ void NetworkManager::setReady(bool isReady)
 		enet_peer_send(peer, 0, packet);
 	}
 }
+
+const int NetworkManager::getTick()const
+{
+    return m_tick;
+}

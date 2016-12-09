@@ -18,6 +18,17 @@ enum EMode
     EModeStation,
 };
 
+struct Vec2
+{
+    Vec2(float x, float y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+    float x;
+    float y;
+};
+
 class GameObject;
 
 class GameScene : public Scene
@@ -30,6 +41,11 @@ public:
 
     void temp();
 private:
+    Vec2 interpolate(float x1, float y1, float x2, float y2);
+    Vec2 interpolateToDirection(float x1, float y1, float direction, float speed);
+
+    void updateView(sf::RenderTarget* rt);
+
     sf::Texture tex; //temp default texture
     sf::Texture shipTexture; //temp ship texture
     sf::Texture guiTex; //GUI bg
@@ -43,6 +59,8 @@ private:
 
     sf::Font m_font;
 
+
+    sf::View m_view;
     t_function* m_callbackLambda;
 
     GUIArea m_gui;
@@ -52,6 +70,9 @@ private:
     std::vector<GameObject*> m_selected;
 
     float m_total_time;
+    int m_tick;
+    float m_tickTime;
+    float m_average_tick;
     int m_ID = 0;
 
     //TODO: make this global?

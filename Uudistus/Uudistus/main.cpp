@@ -10,13 +10,9 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "Galactic Uudistus");
     window.setFramerateLimit(60);
 
-    sf::CircleShape shape(256.f);
-    shape.setFillColor(sf::Color(0, 25, 10));
-
-	//Scene* lobby = new LobbyScene(&window);
-    //Scene* current = new GameScene(&window);
 	SceneManager sm;
-	
+    sf::Clock clock;
+
     printf_s("Starting game loop\n");
 	sm.changeScene(new LobbyScene(&window, &sm));
     while (window.isOpen())
@@ -28,16 +24,11 @@ int main()
                 window.close();
         }
 
-		//lobby->update(0.1f);
-		//current->update(0.1f);
-
-		sm.update(0.1f);
+		sm.update(clock.restart().asSeconds());
         window.clear();
 
 		sm.draw(&window);
-		//lobby->draw(&window);
-		//current->draw(&window);
-		//window.draw(shape);
+
         window.display();
     }
     return 0;

@@ -124,7 +124,7 @@ void World::update(const float dt)
 void World::createStar(const float x, const float y, const int owner, const float energy)
 {
     //create GameObject
-    GameObject* go = new GameObject(m_ID++, x, y, 64, owner, EStar, energy);
+    GameObject* go = new GameObject(m_ID++, x, y, 64.f, owner, EStar, energy);
 
     //this will be done elsewhere
     //for (Star* star : m_stars)
@@ -171,10 +171,19 @@ void World::sendShip(const int sender, const int target)
         }
     }
 
+    float speed = 10;
+    for (Connection* c : star1->getConnections())
+    {
+        if (c->target == star2)
+        {
+            speed = 20;
+        }
+    }
+
     GameObject* go;
     
     go = star1->getGameObject();
-    createShip(go->getX(), go->getY(), go->getOwner(), go->getEnergy(), star2->getGameObject(), 10);
+    createShip(go->getX(), go->getY(), go->getOwner(), go->getEnergy(), star2->getGameObject(), speed);
     go->setEnergy(0.f);
 
 }

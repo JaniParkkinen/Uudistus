@@ -11,8 +11,8 @@
 GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     :Scene(window, sm),
     m_mode(EModeDefault),
-    m_gui(600, 0, 200, 800, 16, 2)
-
+    m_gui(600, 0, 200, 800, 16, 2),
+    m_view(sf::Vector2f(400, 400), sf::Vector2f(800, 800))
 {
     NetworkManager::instance()->setWorld(&m_world);
 
@@ -38,6 +38,8 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     m_shipSprite.setOrigin(shipTexture.getSize().x / 2.0f, shipTexture.getSize().y / 2.0f);
 
     m_total_time = 0;
+    m_tickTime = 0;
+    m_average_tick = 10.f / 60.f;
 
     m_rw = window;
 	m_sm = sm;
@@ -52,6 +54,8 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     m_gui.setElementMargin(8, 8);
 
     m_gui.createText("Energy", "---", &m_font);
+
+    m_gui.createButton("Test", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
 }
 
 GameScene::~GameScene()
@@ -62,7 +66,7 @@ GameScene::~GameScene()
 void GameScene::temp()
 {
     printf_s("Temp called!\n");
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 20; i++)
     {
         NetworkManager::instance()->sendShip(0, 1);
     }
@@ -70,6 +74,8 @@ void GameScene::temp()
 
 void GameScene::update(float dt)
 {
+    m_gui.update();
+
     if (m_selected.size() > 0)
     {
         m_gui.getElementByName<GUIText>("Energy")->setText("E:" + std::to_string(m_selected[0]->getEnergy()));
@@ -84,9 +90,14 @@ void GameScene::update(float dt)
     if (m_rw != nullptr)
         m_input->update(dt, m_rw);
 
-    m_gui.update();
-
     m_total_time += dt;
+    m_tickTime += dt;
+    if (NetworkManager::instance()->getTick() > m_tick)
+    {
+        m_average_tick = (m_average_tick * 0.75f + m_tickTime * 0.25f);
+        m_tickTime = dt;
+        m_tick = NetworkManager::instance()->getTick();
+    }
 
     const std::vector<GameObject*>& objects = m_world.getObjects();
 
@@ -95,6 +106,8 @@ void GameScene::update(float dt)
     {
         m_mode = EModeConnect;
     }
+
+    sf::Vector2f mousePos = m_input->getMousePos();
 
     //default mode
     if (m_mode == EModeDefault)
@@ -106,7 +119,7 @@ void GameScene::update(float dt)
             m_world.m_starLock.lock();
             for (GameObject* go : objects)
             {
-                if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
+                if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                 {
                     m_selected.push_back(go);
                     break;
@@ -123,7 +136,7 @@ void GameScene::update(float dt)
             {
                 if (go->getType() == EStar)
                 {
-                    if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
+                    if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                     {
                         for (GameObject* selected : m_selected)
                         {
@@ -151,7 +164,7 @@ void GameScene::update(float dt)
             {
                 if (go->getType() == EStar)
                 {
-                    if (go->getDistanceToPoint(m_input->getMousePos().x, m_input->getMousePos().y) < go->getSize())
+                    if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                     {
                         for (GameObject* selected : m_selected)
                         {
@@ -218,7 +231,9 @@ void GameScene::draw(sf::RenderTarget* rt)
         Ship* ship = ships[i];
         m_shipSprite.setRotation(ship->getDirection() * 180.f / 3.14159265f);
 
-        m_shipSprite.setPosition(ship->getGameObject()->getX(), ship->getGameObject()->getY());
+        Vec2 pos = interpolateToDirection(ship->getGameObject()->getX(), ship->getGameObject()->getY(), ship->getDirection(), ship->getSpeed());
+
+        m_shipSprite.setPosition(pos.x, pos.y);
         m_shipSprite.setColor(m_playerColor[ship->getGameObject()->getOwner()]);
         rt->draw(m_shipSprite);
     }
@@ -233,12 +248,56 @@ void GameScene::draw(sf::RenderTarget* rt)
     for (unsigned i = 0; i < m_selected.size(); i++)
     {
         GameObject* go = m_selected[i];
-        selection.setRadius(go->getSize() / 2 + 32.f);
-        selection.setOrigin(go->getSize(), go->getSize());
+        float radius = go->getSize() / 2.0f + 4.f;
+        selection.setRadius(radius);
+        selection.setOrigin(radius, radius);
         selection.setPosition(sf::Vector2f(go->getX(), go->getY()));
         rt->draw(selection);
     }
 
     //draw GUI
     m_gui.draw(rt);
+    updateView(rt);
+    rt->setView(m_view);
+}
+
+Vec2 GameScene::interpolate(float x1, float y1, float x2, float y2)
+{
+    float scale = m_tickTime / m_average_tick;
+    float x = x1 + ((x2 - x1) * scale);
+    float y = y1 + ((y2 - y1) * scale);
+
+    return Vec2(x, y);
+}
+
+Vec2 GameScene::interpolateToDirection(float x1, float y1, float direction, float speed)
+{
+    float units_per_tick = speed * m_average_tick;
+
+    Vec2 result = interpolate(x1, y1, x1 +cos(direction) * units_per_tick, y1 + sin(direction) * units_per_tick);
+
+    return result;
+}
+
+void GameScene::updateView(sf::RenderTarget* rt)
+{
+    sf::Vector2i pos = m_input->getMousePosWindow(); //GUI coordinates
+
+    rt->setView(m_view);
+    if (pos.x < 32)
+    {
+        m_view.move(-1.f, 0);
+    }
+    else if (pos.x > rt->getSize().x - 32)
+    {
+        m_view.move(1.f, 0);
+    }
+    if (pos.y < 32)
+    {
+        m_view.move(0, -1.f);
+    }
+    else if (pos.y > rt->getSize().y - 32)
+    {
+        m_view.move(0, 1.f);
+    }
 }
