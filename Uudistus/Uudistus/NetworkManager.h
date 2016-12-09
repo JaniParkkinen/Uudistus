@@ -4,6 +4,7 @@
 #include <enet\enet.h>
 #include <string>
 #include <thread>
+#include "SceneManager.h"
 
 class World;
 
@@ -18,6 +19,7 @@ public:
 
 
 	void setWorld(World* world);
+	void setSceneManager(SceneManager* sm);
 	void initNetwork(std::string ip);
     void createStar(int x, int y, int energy, int owner, int level);
     void sendShip(int id1, int id2);
@@ -35,6 +37,8 @@ private:
     int m_tick;
 
     World* m_world;
+	SceneManager* m_sceneM;
+	sf::RenderWindow* m_rw;
 
     void clientLoop();
 

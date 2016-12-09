@@ -15,10 +15,10 @@ int main()
 
 	//Scene* lobby = new LobbyScene(&window);
     //Scene* current = new GameScene(&window);
-	SceneManager sm;
+	SceneManager sm(&window);
 	
     printf_s("Starting game loop\n");
-	sm.changeScene(new LobbyScene(&window, &sm));
+	sm.changeScene(0);
     while (window.isOpen())
     {
         sf::Event event;

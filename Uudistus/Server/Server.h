@@ -34,6 +34,7 @@ private:
     int m_tick;
     int m_ok;
     int m_nPlayers;
+	int m_ready;
     //float m_tickTimer;
     std::vector<std::pair<ENetPacket*, int>> m_packets; //packet, tick
 
