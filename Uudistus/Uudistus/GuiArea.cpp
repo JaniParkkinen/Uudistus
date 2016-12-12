@@ -67,6 +67,15 @@ void GUIArea::setBackground(sf::Texture* texture, float alpha)
 
 void GUIArea::createButton(std::string name, t_function callback, sf::Texture* up, sf::Texture* down, sf::Texture* hover)
 {
+    //TODO: have am internal vector of std::pairs
+    //rearrange all when a button is deleted or remove()'d
+
+    if (m_buttons.find(name) != m_buttons.end())
+    {
+        delete m_buttons[name];
+        m_buttons.erase(name);
+    }
+
     int elementW = (m_w - m_xBorder * 2 - (m_xElementMargin * (m_columns - 1))) / m_columns;
     int elementH = (m_h - m_yBorder * 2 - (m_yElementMargin * (m_rows - 1))) / m_rows;
 

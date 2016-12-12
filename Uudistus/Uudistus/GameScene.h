@@ -53,9 +53,13 @@ private:
     sf::Texture shipTexture; //temp ship texture
     sf::Texture guiTex; //GUI bg
 
-    sf::Texture buttonUp;
-    sf::Texture buttonDown;
-    sf::Texture buttonHover;
+    sf::Texture connectUp;
+    sf::Texture connectDown;
+    sf::Texture connectHover;
+
+    sf::Texture upgradeUp;
+    sf::Texture upgradeDown;
+    sf::Texture upgradeHover;
 
     sf::Sprite m_starSprite;
     sf::Sprite m_shipSprite;

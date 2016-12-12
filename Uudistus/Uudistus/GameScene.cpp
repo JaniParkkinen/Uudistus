@@ -21,9 +21,13 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     shipTexture.loadFromFile("assets/ship.png");
     guiTex.loadFromFile("assets/gui.png");
 
-    buttonUp.loadFromFile("assets/button_up.png");
-    buttonDown.loadFromFile("assets/button_down.png");
-    buttonHover.loadFromFile("assets/button_hover.png");
+    connectUp.loadFromFile("assets/connect_up.png");
+    connectDown.loadFromFile("assets/connect_down.png");
+    connectHover.loadFromFile("assets/connect_hover.png");
+
+    upgradeUp.loadFromFile("assets/upgrade_up.png");
+    upgradeDown.loadFromFile("assets/upgrade_down.png");
+    upgradeHover.loadFromFile("assets/upgrade_hover.png");
 
     m_font.loadFromFile("assets/COLONNA.TTF");
 
@@ -46,7 +50,7 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
 	m_sm = sm;
 
     int seed = 0;
-    //get seed from server
+    //TODO: get seed from server
 
     m_world.generateMap(NetworkManager::g_nPlayers);
 
@@ -60,12 +64,17 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     }
     m_world.m_starLock.unlock();
 
+    m_buttons.setBackground(&guiTex);
+    m_buttons.setBorder(32, 32);
+    m_buttons.setElementMargin(8, 8);
+
     m_gui.setBackground(&guiTex);
     m_gui.setBorder(32, 32);
     m_gui.setElementMargin(8, 8);
 
     m_gui.createText("Energy", "---", &m_font);
     m_gui.createText("Owner", "---", &m_font);
+    m_gui.createText("Level", "", &m_font);
 }
 
 GameScene::~GameScene()
@@ -100,16 +109,25 @@ void GameScene::update(float dt)
     if (m_selected.size() > 0)
     {
         m_gui.getElementByName<GUIText>("Energy")->setText("E:" + std::to_string(m_selected[0]->getEnergy()));
-        m_gui.getElementByName<GUIText>("Owner")->setText("O:" + std::to_string(m_selected[0]->getOwner()));
+        if (m_selected[0]->getOwner() == 0)
+        {
+            m_gui.getElementByName<GUIText>("Owner")->setText("Unoccupied");
+        }
+        else
+        {
+            m_gui.getElementByName<GUIText>("Owner")->setText("Player " + std::to_string(m_selected[0]->getOwner()));
+        }
+        if (m_selected[0]->getType() == EStar)
+        {
+            m_gui.getElementByName<GUIText>("Level")->setText("Level: " + std::to_string(static_cast<Star*>(m_selected[0]->getComponent())->getLevel()));
+        }
     }
 
-    //TODO: check if mouse position @ GUI area
-
-    if (m_input->mousePressed(MouseButton::Left))
-    {
-        sf::Vector2f mPos = m_input->getMousePos();
-        printf_s("mouse position: %f, %f\n", mPos.x, mPos.y);
-    }
+    //if (m_input->mousePressed(MouseButton::Left))
+    //{
+    //    sf::Vector2f mPos = m_input->getMousePos();
+    //    printf_s("mouse position: %f, %f\n", mPos.x, mPos.y);
+    //}
 
     if (m_rw != nullptr)
         m_input->update(dt, m_rw);
@@ -134,111 +152,133 @@ void GameScene::update(float dt)
         }
     }
 
+    //Mouse interaction
     sf::Vector2f mousePos = m_input->getMousePos();
-
-    //default mode
-    if (m_mode == EModeDefault)
+    if (m_input->getMousePosWindow().x < 600)
     {
-        if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
+
+        //default mode
+        if (m_mode == EModeDefault)
         {
-            ObjectType oldType = ObjectType::EOther;
-            int oldPlayer = -1;
-            if (m_selected.size() != 0)
+            if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
             {
-                oldType = m_selected[0]->getType();
-                oldPlayer = m_selected[0]->getOwner();
-            }
-            
-            m_selected.clear();
-            m_world.m_shipLock.lock();
-            m_world.m_starLock.lock();
-            for (GameObject* go : objects)
-            {
-                if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
+                ObjectType oldType = ObjectType::EOther;
+                int oldPlayer = -1;
+                if (m_selected.size() != 0)
                 {
-                    m_selected.push_back(go);
-                    if (m_selected[0]->getOwner() != oldPlayer || m_selected[0]->getType() != oldType)
-                    {
-                        m_buttons.clearButtons();
-                        if (go->getType() == EStar)
-                        {
-                            if (m_selected[0]->getOwner() == NetworkManager::g_playerNumber)
-                            {
-                                m_buttons.createButton("star_connect", std::bind(&GameScene::modeConnect, this), &buttonUp, &buttonDown, &buttonHover);
-                                m_buttons.createButton("star_upgrade", std::bind(&GameScene::upgradeStar, this), &buttonUp, &buttonDown, &buttonHover);
-                            }
-                        }
-                    }
-                    break;
+                    oldType = m_selected[0]->getType();
+                    oldPlayer = m_selected[0]->getOwner();
                 }
-            }
-            if (m_selected.size() == 0)
-            {
-                m_buttons.clearButtons();
-            }
-            m_world.m_starLock.unlock();
-            m_world.m_shipLock.unlock();
-        }
-        if (m_input->mousePressed(MouseButton::Right))
-        {
-            m_world.m_shipLock.lock();
-            m_world.m_starLock.lock();
-            for (GameObject* go : objects)
-            {
-                if (go->getType() == EStar)
+
+                m_selected.clear();
+                m_world.m_shipLock.lock();
+                m_world.m_starLock.lock();
+                for (GameObject* go : objects)
                 {
                     if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                     {
-                        for (GameObject* selected : m_selected)
+                        m_selected.push_back(go);
+                        if (m_selected[0]->getOwner() != oldPlayer || m_selected[0]->getType() != oldType || m_selected[0]->getOwner() == NetworkManager::g_playerNumber)
                         {
-                            if (selected->getType() == EStar && selected->getOwner() == NetworkManager::g_playerNumber)
+                            m_buttons.clearButtons();
+                            if (go->getType() == EStar)
                             {
-                                NetworkManager::instance()->sendShip(selected->getID(), go->getID());
+                                if (m_selected[0]->getOwner() == NetworkManager::g_playerNumber)
+                                {
+                                    m_buttons.createButton("star_connect", std::bind(&GameScene::modeConnect, this), &connectUp, &connectDown, &connectHover);
+                                    m_buttons.createButton("star_upgrade", std::bind(&GameScene::upgradeStar, this), &upgradeUp, &upgradeDown, &upgradeHover);
+                                }
                             }
                         }
                         break;
                     }
                 }
-            }
-            m_world.m_starLock.unlock();
-            m_world.m_shipLock.unlock();
-        }
-    }
-    //connect
-    else if (m_mode == EModeConnect)
-    {
-        if (m_input->mousePressed(MouseButton::Left))
-        {
-            m_world.m_shipLock.lock();
-            m_world.m_starLock.lock();
-            for (GameObject* go : objects)
-            {
-                if (go->getType() == EStar)
+                if (m_selected.size() == 0)
                 {
-                    if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
+                    m_buttons.clearButtons();
+                }
+                m_gui.getElementByName<GUIText>("Energy")->setText("Nothing");
+                m_gui.getElementByName<GUIText>("Owner")->setText("Selected");
+                m_gui.getElementByName<GUIText>("Level")->setText("");
+                m_world.m_starLock.unlock();
+                m_world.m_shipLock.unlock();
+            }
+            if (m_input->mousePressed(MouseButton::Right))
+            {
+                m_world.m_shipLock.lock();
+                m_world.m_starLock.lock();
+                for (GameObject* go : objects)
+                {
+                    if (go->getType() == EStar)
                     {
-                        for (GameObject* selected : m_selected)
+                        if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                         {
-                            if (selected->getType() == EStar)
+                            for (GameObject* selected : m_selected)
                             {
-								NetworkManager::instance()->connect(selected->getID(), go->getID());
-                                m_mode = EModeDefault;
+                                if (selected->getType() == EStar && selected->getOwner() == NetworkManager::g_playerNumber)
+                                {
+                                    NetworkManager::instance()->sendShip(selected->getID(), go->getID());
+                                }
                             }
+                            break;
                         }
-                        break;
                     }
                 }
+                m_world.m_starLock.unlock();
+                m_world.m_shipLock.unlock();
             }
-            m_world.m_starLock.unlock();
-            m_world.m_shipLock.unlock();
         }
-
-        if (m_input->mousePressed(MouseButton::Right))
+        //connect
+        else if (m_mode == EModeConnect)
         {
-            m_mode = EModeDefault;
+            if (m_input->mousePressed(MouseButton::Left))
+            {
+                m_world.m_shipLock.lock();
+                m_world.m_starLock.lock();
+                for (GameObject* go : objects)
+                {
+                    if (go->getType() == EStar)
+                    {
+                        if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
+                        {
+                            for (GameObject* selected : m_selected)
+                            {
+                                if (selected->getType() == EStar)
+                                {
+                                    NetworkManager::instance()->connect(selected->getID(), go->getID());
+                                    m_mode = EModeDefault;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                m_world.m_starLock.unlock();
+                m_world.m_shipLock.unlock();
+            }
+
+            if (m_input->mousePressed(MouseButton::Right))
+            {
+                m_mode = EModeDefault;
+            }
         }
     }
-    //TODO: remove deleted objects from m_selected
+    
+    for (int i = 0; i < m_selected.size(); i++)
+    {
+        if (m_selected[i]->isDestroyed())
+        {
+            for (int j = i; j < m_selected.size() - 1; j++)
+            {
+                m_selected[j] = m_selected[j + 1];
+            }
+            m_selected.pop_back();
+            m_buttons.clearButtons();
+
+            m_gui.getElementByName<GUIText>("Energy")->setText("Nothing");
+            m_gui.getElementByName<GUIText>("Owner")->setText("Selected");
+        }
+    }
 }
 
 void GameScene::draw(sf::RenderTarget* rt)
@@ -253,7 +293,7 @@ void GameScene::draw(sf::RenderTarget* rt)
         };
         line[0].color = m_playerColor[m_selected[0]->getOwner()];
         line[1].color = sf::Color::White;
-        rt->draw(line, 5, sf::Lines);
+        rt->draw(line, 2, sf::Lines);
     }
 
     //draw stars and connections
@@ -282,7 +322,7 @@ void GameScene::draw(sf::RenderTarget* rt)
                 };
                 line[0].color = m_playerColor[starObject->getOwner()];
                 line[1].color = m_playerColor[targetObject->getOwner()];
-                rt->draw(line, 5, sf::Lines);
+                rt->draw(line, 2, sf::Lines);
             }
         }
     }

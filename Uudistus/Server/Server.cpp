@@ -46,7 +46,7 @@ void Server::serverLoop() {
         }
         case ENET_EVENT_TYPE_RECEIVE:
         {
-            printf_s("event recieved.\n");
+            //printf_s("event recieved.\n");
             fflush(stdout);
             int* intData = (int*)event.packet->data;
 			if (intData[0] == 0)
@@ -80,7 +80,7 @@ void Server::serverLoop() {
             }
             else if (intData[0] == 10) //ok
             {
-                printf_s("test ok\n");
+                //printf_s("test ok\n");
                 m_ok++;
             }
             else
@@ -122,11 +122,24 @@ void Server::eventLoop()
             ENetPacket* packet = m_packets[i].first;
             processPacket(packet);
             enet_packet_destroy(packet);
-            //  remove packet from vector
+            for (int j = i; j < m_packets.size() - 1; j++)
+            {
+                m_packets[j] = m_packets[j + 1];
+            }
+            m_packets.pop_back();
         }
         else
+        {
+            printf_s("Current tick %u, command tick: %u", m_tick, m_packets[i].second);
+            ENetPacket* packet = m_packets[i].first;
+            enet_packet_destroy(packet);
+            for (int j = i; j < m_packets.size() - 1; j++)
+            {
+                m_packets[j] = m_packets[j + 1];
+            }
+            m_packets.pop_back();
             continue;
-
+        }
     }
 
     unsigned buf[2] = { 10, m_tick };

@@ -29,6 +29,8 @@ public:
 
     void update(const float dt)override;
 
+    const int getLevel()const;
+
     const std::vector<Connection*>& getConnections();
     //bool isConnected(Star* target);
 

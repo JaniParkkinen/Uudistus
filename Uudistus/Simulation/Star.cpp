@@ -30,6 +30,11 @@ const std::vector<Connection*>& Star::getConnections()
     return m_connections;
 }
 
+const int Star::getLevel()const
+{
+    return m_level;
+}
+
 bool Star::connect(const Star* target)
 {
     if (target == this)
