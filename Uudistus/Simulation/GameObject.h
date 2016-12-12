@@ -11,6 +11,7 @@ enum ObjectType
 {
     EStar,
     EShip,
+    EOther
 };
 
 class GameObject
@@ -22,13 +23,13 @@ public:
     void update(const float dt);
     void setPosition(float x, float y);
     void setSize(float size);
-    void setEnergy(float energy);
+    void setEnergy(int energy);
     void setOwner(int owner);
 
     const float getX()const;
     const float getY()const;
     const float getSize()const;
-    const float getEnergy()const;
+    const int getEnergy()const;
     const int getOwner()const;
     const ObjectType getType()const;
 
@@ -60,7 +61,7 @@ public:
 protected:
     float m_x, m_y;
     ObjectType m_type;
-    float m_energy;
+    int m_energy;
     float m_size;
     int m_owner;
     int m_ID;

@@ -37,12 +37,22 @@ void GUIArea::draw(sf::RenderTarget* rt)
 
 void GUIArea::update()
 {
+    std::vector<std::string> removed;
+
     if (m_isVisible)
     {
         for (std::pair<std::string, GUIElement*> b : m_buttons)
         {
             b.second->update();
+            if (b.second->isRemoved())
+            {
+                removed.push_back(b.first);
+            }
         }
+    }
+    for (unsigned i = 0; i < removed.size(); i++)
+    {
+        m_buttons.erase(removed[i]);
     }
 }
 
@@ -87,13 +97,18 @@ void GUIArea::createText(std::string name, std::string text, sf::Font* font)
 
 void GUIArea::clearButtons()
 {
-    m_buttons.clear();
+    //m_buttons.clear();
+    for (std::pair<std::string, GUIElement*> b : m_buttons)
+    {
+        b.second->remove();
+    }
 }
 
-void GUIArea::removeButton(std::string name)
+void GUIArea::removeElement(std::string name)
 {
     //delete m_buttons[name];
-    m_buttons.erase(name);
+    //m_buttons.erase(name);
+    m_buttons[name]->remove();
 }
 
 void GUIArea::setButtonActive(bool active)

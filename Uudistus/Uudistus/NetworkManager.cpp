@@ -6,11 +6,15 @@
 
 NetworkManager* NetworkManager::nm = nullptr;
 
+int NetworkManager::g_playerNumber = -1;
+int NetworkManager::g_nPlayers = 0;
+
 NetworkManager::NetworkManager()
 {
     m_world = nullptr;
 	m_sceneM = nullptr;
     m_tick = 0;
+
     printf("Constructing Network..\n");
     //m_clientThread = std::thread(&NetworkManager::clientLoop, this);
 	initNetwork("127.0.0.1");
@@ -65,6 +69,11 @@ void NetworkManager::clientLoop() {
 				case 8:
 				{
 					int* message = (int*)event.packet->data;
+                    if (g_playerNumber == -1)
+                    {
+                        g_playerNumber = *(message + 2);
+                    }
+                    g_nPlayers = *(message + 2);
 					if (*(message + 1) == *(message + 2))
 					{
 						m_sceneM->changeScene(1);

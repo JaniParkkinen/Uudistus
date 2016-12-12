@@ -40,7 +40,7 @@ void GameObject::setSize(float size)
     m_size = size;
 }
 
-void GameObject::setEnergy(float energy)
+void GameObject::setEnergy(int energy)
 {
     m_energy = energy;
 }
@@ -67,7 +67,7 @@ const float GameObject::getSize()const
     return m_size;
 }
 
-const float GameObject::getEnergy()const
+const int GameObject::getEnergy()const
 {
     return m_energy;
 }

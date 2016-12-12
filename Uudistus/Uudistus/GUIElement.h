@@ -14,6 +14,7 @@ public:
         m_h = h;
         m_depth = 0;
         m_visible = true;
+        m_remove = false;
         m_color = sf::Color::White;
     }
 
@@ -35,10 +36,21 @@ public:
         m_color = color;
     }
 
+    virtual void remove()
+    {
+        m_remove = true;
+    }
+
+    virtual bool isRemoved()
+    {
+        return m_remove;
+    }
+
 protected:
     int m_x, m_y, m_w, m_h;
     int m_depth;
     bool m_visible;
+    bool m_remove;
     sf::Color m_color;
 };
 

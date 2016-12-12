@@ -11,7 +11,8 @@
 GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     :Scene(window, sm),
     m_mode(EModeDefault),
-    m_gui(600, 0, 200, 800, 16, 2),
+    m_gui(600, 0, 200, 200, 4, 1),
+    m_buttons(600, 200, 200, 600, 12, 2),
     m_view(sf::Vector2f(400, 400), sf::Vector2f(800, 800))
 {
     NetworkManager::instance()->setWorld(&m_world);
@@ -47,20 +48,39 @@ GameScene::GameScene(sf::RenderWindow* window, SceneManager* sm)
     int seed = 0;
     //get seed from server
 
-    m_world.generateMap(seed);
+    m_world.generateMap(NetworkManager::g_nPlayers);
+
+    m_world.m_starLock.lock();
+    for (const Star* star : m_world.getStars())
+    {
+        if (star->getGameObjectConst()->getOwner() == NetworkManager::g_playerNumber)
+        {
+            m_view.setCenter(star->getGameObjectConst()->getX(), star->getGameObjectConst()->getY());
+        }
+    }
+    m_world.m_starLock.unlock();
 
     m_gui.setBackground(&guiTex);
     m_gui.setBorder(32, 32);
     m_gui.setElementMargin(8, 8);
 
     m_gui.createText("Energy", "---", &m_font);
-
-    m_gui.createButton("Test", std::bind(&GameScene::temp, this), &buttonUp, &buttonDown, &buttonHover);
+    m_gui.createText("Owner", "---", &m_font);
 }
 
 GameScene::~GameScene()
 {
     delete m_callbackLambda;
+}
+
+void GameScene::upgradeStar()
+{
+    static_cast<Star*>(m_selected[0]->getComponent())->upgrade();
+}
+
+void GameScene::modeConnect()
+{
+    m_mode = EMode::EModeConnect;
 }
 
 void GameScene::temp()
@@ -75,11 +95,15 @@ void GameScene::temp()
 void GameScene::update(float dt)
 {
     m_gui.update();
+    m_buttons.update();
 
     if (m_selected.size() > 0)
     {
         m_gui.getElementByName<GUIText>("Energy")->setText("E:" + std::to_string(m_selected[0]->getEnergy()));
+        m_gui.getElementByName<GUIText>("Owner")->setText("O:" + std::to_string(m_selected[0]->getOwner()));
     }
+
+    //TODO: check if mouse position @ GUI area
 
     if (m_input->mousePressed(MouseButton::Left))
     {
@@ -104,7 +128,10 @@ void GameScene::update(float dt)
     //change mode
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
     {
-        m_mode = EModeConnect;
+        if (m_selected.size() == 1 && m_selected[0]->getType() == EStar && m_selected[0]->getOwner() == NetworkManager::g_playerNumber)
+        {
+            m_mode = EModeConnect;
+        }
     }
 
     sf::Vector2f mousePos = m_input->getMousePos();
@@ -114,6 +141,14 @@ void GameScene::update(float dt)
     {
         if (m_input->mousePressed(MouseButton::Left)) //single click, select single object
         {
+            ObjectType oldType = ObjectType::EOther;
+            int oldPlayer = -1;
+            if (m_selected.size() != 0)
+            {
+                oldType = m_selected[0]->getType();
+                oldPlayer = m_selected[0]->getOwner();
+            }
+            
             m_selected.clear();
             m_world.m_shipLock.lock();
             m_world.m_starLock.lock();
@@ -122,8 +157,24 @@ void GameScene::update(float dt)
                 if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                 {
                     m_selected.push_back(go);
+                    if (m_selected[0]->getOwner() != oldPlayer || m_selected[0]->getType() != oldType)
+                    {
+                        m_buttons.clearButtons();
+                        if (go->getType() == EStar)
+                        {
+                            if (m_selected[0]->getOwner() == NetworkManager::g_playerNumber)
+                            {
+                                m_buttons.createButton("star_connect", std::bind(&GameScene::modeConnect, this), &buttonUp, &buttonDown, &buttonHover);
+                                m_buttons.createButton("star_upgrade", std::bind(&GameScene::upgradeStar, this), &buttonUp, &buttonDown, &buttonHover);
+                            }
+                        }
+                    }
                     break;
                 }
+            }
+            if (m_selected.size() == 0)
+            {
+                m_buttons.clearButtons();
             }
             m_world.m_starLock.unlock();
             m_world.m_shipLock.unlock();
@@ -140,7 +191,7 @@ void GameScene::update(float dt)
                     {
                         for (GameObject* selected : m_selected)
                         {
-                            if (selected->getType() == EStar)
+                            if (selected->getType() == EStar && selected->getOwner() == NetworkManager::g_playerNumber)
                             {
                                 NetworkManager::instance()->sendShip(selected->getID(), go->getID());
                             }
@@ -192,6 +243,19 @@ void GameScene::update(float dt)
 
 void GameScene::draw(sf::RenderTarget* rt)
 {
+    //special modes
+    if (m_mode == EModeConnect)
+    {
+        sf::Vertex line[] =
+        {
+            sf::Vertex(sf::Vector2f(m_selected[0]->getX(), m_selected[0]->getY())),
+            sf::Vertex(InputManager::instance()->getMousePos())
+        };
+        line[0].color = m_playerColor[m_selected[0]->getOwner()];
+        line[1].color = sf::Color::White;
+        rt->draw(line, 5, sf::Lines);
+    }
+
     //draw stars and connections
     const std::vector<Star*> stars = m_world.getStars();
     m_world.m_starLock.lock();
@@ -257,6 +321,7 @@ void GameScene::draw(sf::RenderTarget* rt)
 
     //draw GUI
     m_gui.draw(rt);
+    m_buttons.draw(rt);
     updateView(rt);
     rt->setView(m_view);
 }
@@ -272,7 +337,7 @@ Vec2 GameScene::interpolate(float x1, float y1, float x2, float y2)
 
 Vec2 GameScene::interpolateToDirection(float x1, float y1, float direction, float speed)
 {
-    float units_per_tick = speed * m_average_tick;
+    float units_per_tick = speed * 0.1f; //0.1 = simulation tick time
 
     Vec2 result = interpolate(x1, y1, x1 +cos(direction) * units_per_tick, y1 + sin(direction) * units_per_tick);
 

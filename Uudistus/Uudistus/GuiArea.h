@@ -16,7 +16,7 @@ public:
     void createButton(std::string name, t_function callback, sf::Texture* up, sf::Texture* down = nullptr, sf::Texture* hover = nullptr);
     void createText(std::string name, std::string text, sf::Font* font);
     void clearButtons();
-    void removeButton(std::string name);
+    void removeElement(std::string name);
     void setButtonActive(bool active);
     void setButtonActive(std::string name, bool active);
     void setVisible(bool visible);

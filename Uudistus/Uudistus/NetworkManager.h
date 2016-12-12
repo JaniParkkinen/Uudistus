@@ -27,6 +27,9 @@ public:
 	void setReady(bool isReady);
 
     const int getTick()const;
+
+    static int g_playerNumber;
+    static int g_nPlayers;
 private:
 	NetworkManager(); //connect
     ~NetworkManager();

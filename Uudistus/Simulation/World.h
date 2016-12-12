@@ -34,6 +34,8 @@ private:
 
     //GameObject* findObject(int ID);
 
+    int m_nPlayers;
+
     std::vector<GameObject*> m_objects;
     std::vector<Star*> m_stars;
     std::vector<Ship*> m_ships;

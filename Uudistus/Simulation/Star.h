@@ -25,6 +25,7 @@ public:
     Star(GameObject* parent, const float energy = 100);
     ~Star();
     bool connect(const Star* target);
+    void upgrade();
 
     void update(const float dt)override;
 
@@ -34,6 +35,7 @@ public:
 private:
     float m_energyTimer;
     float m_shipTimer;
+    int m_level;
     std::vector<Connection*> m_connections;
 };
 

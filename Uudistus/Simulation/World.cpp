@@ -217,11 +217,45 @@ void World::connectStars(const int id1, const int id2)
     }
 }
 
-void World::generateMap(int seed)
+void World::generateMap(int nPlayers)
 {
-    createStar(64, 64, 1, 9001);
-    createStar(256, 64, 2, 9001);
-    createStar(64, 256, 3, 9001);
+    m_nPlayers = nPlayers;
 
-    connectStars(m_stars[0]->getGameObject()->getID(), m_stars[1]->getGameObject()->getID());
+    createStar(0, 0, 0, 100);
+
+    srand(nPlayers);
+
+    const float sector = 3.14159265 * 2 / nPlayers;
+
+    for (int i = 0; i < 5; i++)
+    {
+        float x;
+        float y;
+        float d;
+        do
+        {
+            x = rand() % 500;
+            y = rand() % 500;
+            //find closest star
+            d = FLT_MAX;
+            for (Star* star : m_stars)
+            {
+                float dx = star->getGameObject()->getX() - x;
+                float dy = star->getGameObject()->getY() - y;
+                float d2 = dx*dx + dy*dy;
+                if (d2 < d)
+                {
+                    d = d2;
+                }
+            }
+        }while (d < 64*64);
+
+        const float dist = sqrt(x*x + y*y);
+        const float dir = atan2(y, x);
+
+        for (int j = 0; j < nPlayers; j++)
+        {
+            createStar(cos(sector * j + dir) * dist, sin(sector * j + dir) * dist, i == 4 ? j + 1 : 0, j == 4 ? 250 : 100);
+        }
+    }
 }

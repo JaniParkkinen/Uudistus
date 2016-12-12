@@ -46,6 +46,9 @@ private:
 
     void updateView(sf::RenderTarget* rt);
 
+    void upgradeStar();
+    void modeConnect();
+
     sf::Texture tex; //temp default texture
     sf::Texture shipTexture; //temp ship texture
     sf::Texture guiTex; //GUI bg
@@ -64,6 +67,7 @@ private:
     t_function* m_callbackLambda;
 
     GUIArea m_gui;
+    GUIArea m_buttons;
     World m_world;
 
     EMode m_mode;
@@ -78,15 +82,15 @@ private:
     //TODO: make this global?
     const sf::Color m_playerColor[10]
     {
-        sf::Color(0, 255, 0), //player0
+        sf::Color(255, 255, 255), //unoccupied
+        sf::Color(0, 255, 0), //player1
         sf::Color(0, 0, 255),
         sf::Color(255, 0, 0),
         sf::Color(0, 255, 255),
         sf::Color(255, 0, 255),
         sf::Color(255, 255, 0),
         sf::Color(255, 127, 0),
-        sf::Color(127, 127, 0), //player7
-        sf::Color(255, 255, 255), //unoccupied
+        sf::Color(127, 127, 0), //player8
         sf::Color(32, 32, 32), //unknown
     };
 

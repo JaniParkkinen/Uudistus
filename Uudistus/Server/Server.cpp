@@ -8,7 +8,6 @@ Server::Server()
     m_nPlayers = 0;
 
     initNetwork();
-    m_world.generateMap(0);
     serverLoop();
     //m_serverThread = std::thread(&Server::serverLoop, this);
 }
@@ -61,9 +60,10 @@ void Server::serverLoop() {
 
 				printf_s("Ready\n");
 
-				Sleep(500);
 				if (m_ready == m_nPlayers)
 				{
+                    Sleep(500);
+                    m_world.generateMap(m_nPlayers);
 					unsigned buf2[2] = { 10, 0 };
 					ENetPacket* packet2 = enet_packet_create(buf2, 2 * sizeof(int), ENET_PACKET_FLAG_RELIABLE);
 					broadcast(packet2);

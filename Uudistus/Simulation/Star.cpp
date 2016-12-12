@@ -6,6 +6,7 @@ Star::Star(GameObject* parent, const float energy)
     printf_s("Star constructor\n");
     m_gameObject = parent;
     parent->setEnergy(energy);
+    m_level = 1;
 }
 
 Star::~Star()
@@ -18,7 +19,10 @@ Star::~Star()
 
 void Star::update(const float dt)
 {
-    getGameObject()->setEnergy(getGameObject()->getEnergy() + dt);
+    if (getGameObjectConst()->getOwner() != 0)
+    {
+        getGameObject()->setEnergy(getGameObject()->getEnergy() + m_level);
+    }
 }
 
 const std::vector<Connection*>& Star::getConnections()
@@ -43,4 +47,12 @@ bool Star::connect(const Star* target)
 
     m_connections.push_back(new Connection(target, length));
     return true;
+}
+
+void Star::upgrade()
+{
+    if (m_gameObject->getEnergy() > m_level * 250)
+    {
+        m_gameObject->setEnergy(m_gameObject->getEnergy() - m_level++ * 250);
+    }
 }

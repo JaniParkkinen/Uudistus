@@ -64,9 +64,9 @@ void LobbyScene::readyCheck()
 
 void LobbyScene::ready()
 {
-		
 		//m_sm->changeScene(1);
 		NetworkManager::instance()->setReady(true);
+        m_gui.removeElement("ready");
 }
 
 void LobbyScene::disconnect()
