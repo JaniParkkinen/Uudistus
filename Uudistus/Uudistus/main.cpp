@@ -7,7 +7,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Galactic Uudistus");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "TähtiUudistus");
     window.setFramerateLimit(60);
 
     std::string str = "127.0.0.1";
