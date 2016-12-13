@@ -17,7 +17,7 @@ NetworkManager::NetworkManager()
 
     printf("Constructing Network..\n");
     //m_clientThread = std::thread(&NetworkManager::clientLoop, this);
-	initNetwork("127.0.0.1");
+	//initNetwork("127.0.0.1");
 }
 
 NetworkManager::~NetworkManager()
