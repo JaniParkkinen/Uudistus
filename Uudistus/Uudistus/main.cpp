@@ -10,12 +10,12 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "Galactic Uudistus");
     window.setFramerateLimit(60);
 
-    std::string str;
+    std::string str = "127.0.0.1";
     sf::Font font;
     font.loadFromFile("assets/font.ttf");
     sf::Text text;
     text.setFont(font);
-    text.setString("aaaaaaaaa");
+    text.setString(str);
     text.setFillColor(sf::Color::Green);
     text.setPosition(32, 32);
 

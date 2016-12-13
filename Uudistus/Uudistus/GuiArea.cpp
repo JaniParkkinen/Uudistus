@@ -72,8 +72,7 @@ void GUIArea::createButton(std::string name, t_function callback, sf::Texture* u
 
     if (m_buttons.find(name) != m_buttons.end())
     {
-        delete m_buttons[name];
-        m_buttons.erase(name);
+        return;
     }
 
     int elementW = (m_w - m_xBorder * 2 - (m_xElementMargin * (m_columns - 1))) / m_columns;

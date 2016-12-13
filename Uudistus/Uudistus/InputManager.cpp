@@ -87,6 +87,7 @@ void InputManager::update(const float dt, const sf::RenderWindow* window)
     }
     else
     {
+        _mousePressed[0] = false;
         _mouseReleased[0] = _mouseDown[0];
         _mouseDown[0] = false;
     }
@@ -110,6 +111,7 @@ void InputManager::update(const float dt, const sf::RenderWindow* window)
     }
     else
     {
+        _mousePressed[1] = false;
         _mouseReleased[1] = _mouseDown[1];
         _mouseDown[1] = false;
     }
@@ -133,6 +135,7 @@ void InputManager::update(const float dt, const sf::RenderWindow* window)
     }
     else
     {
+        _mousePressed[2] = false;
         _mouseReleased[2] = _mouseDown[2];
         _mouseDown[2] = false;
     }

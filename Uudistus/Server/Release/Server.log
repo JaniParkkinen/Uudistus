@@ -1,0 +1,14 @@
+﻿  main.cpp
+  Server.cpp
+Server.cpp(39): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+Server.cpp(56): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+Server.cpp(125): warning C4018: '<': signed/unsigned mismatch
+Server.cpp(136): warning C4018: '<': signed/unsigned mismatch
+Server.cpp(145): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+Server.cpp(171): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+Server.cpp(224): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'enet_uint32'
+  Generating code
+  All 514 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Release\Server.exe
+  Server.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Release\Server.pdb (Full PDB)

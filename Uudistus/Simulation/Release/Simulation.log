@@ -1,0 +1,17 @@
+﻿  Component.cpp
+  GameObject.cpp
+GameObject.cpp(13): warning C4244: 'initializing': conversion from 'const float' to 'int', possible loss of data
+  Ship.cpp
+  Star.cpp
+Star.cpp(8): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+  World.cpp
+World.cpp(162): warning C4018: '<': signed/unsigned mismatch
+World.cpp(186): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+World.cpp(187): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+World.cpp(195): warning C4018: '<': signed/unsigned mismatch
+World.cpp(228): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+World.cpp(228): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+World.cpp(237): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+World.cpp(238): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+World.cpp(258): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+  Simulation.vcxproj -> C:\Users\ollisal\Documents\GitHub\Uudistus\Uudistus\Release\Simulation.lib

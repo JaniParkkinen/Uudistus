@@ -178,7 +178,7 @@ void GameScene::update(float dt)
                     if (go->getDistanceToPoint(mousePos.x, mousePos.y) < go->getSize() / 2.f)
                     {
                         m_selected.push_back(go);
-                        if (m_selected[0]->getOwner() != oldPlayer || m_selected[0]->getType() != oldType || m_selected[0]->getOwner() == NetworkManager::g_playerNumber)
+                        if (m_selected[0]->getOwner() != oldPlayer || m_selected[0]->getType() != oldType/* || m_selected[0]->getOwner() == NetworkManager::g_playerNumber*/)
                         {
                             m_buttons.clearButtons();
                             if (go->getType() == EStar)
